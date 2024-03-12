@@ -1,53 +1,74 @@
 package com.example.w24_3175_g7_onroadsavior;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 public class FragmentHandler extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
-    HomeFragment homeFragment = new HomeFragment();
-    HistroyFragment histroyFragment = new HistroyFragment();
+    FloatingActionButton fab;
 
-    NotificationFragment notificationFragment = new NotificationFragment();
-
-    ProfileFragment profileFragment = new ProfileFragment();
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation_bar);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
-        // getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                if(item.getItemId() == R.id.home){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-                    return  true;
-                }
-                if(item.getItemId() == R.id.history){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, histroyFragment).commit();
-                    return  true;
-                }
-                if(item.getItemId() == R.id.notification){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, notificationFragment).commit();
-                    return  true;
-                }
-                if(item.getItemId() == R.id.profile){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
-                    return  true;
-                }
-                return false;
+        }
+
+        replaceFragment(new HomeFragment());
+
+        bottomNavigationView.setBackground(null);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if(item.getItemId() == R.id.home){
+                replaceFragment(new HomeFragment());
+                return  true;
             }
+            if(item.getItemId() == R.id.shorts){
+                replaceFragment(new HistroyFragment());
+                return  true;
+            }
+            if(item.getItemId() == R.id.subscriptions){
+                replaceFragment(new NotificationFragment());
+                return  true;
+            }
+            if(item.getItemId() == R.id.library){
+                replaceFragment(new ProfileFragment());
+                return  true;
+            }
+            return false;
         });
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
