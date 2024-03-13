@@ -16,7 +16,7 @@
             android:name=".LogInActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentHandler"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
