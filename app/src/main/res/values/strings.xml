@@ -6,4 +6,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtAppName">OnRoad Savior</string>
     <string name="txtTagLine">Your Trusted Roadside Partner</string>
+    <string name="textViewTitleUserHome">How Can We Help You?</string>
+    <string name="imgUserHomeContentDesc">User Home Image</string>
 </resources>
