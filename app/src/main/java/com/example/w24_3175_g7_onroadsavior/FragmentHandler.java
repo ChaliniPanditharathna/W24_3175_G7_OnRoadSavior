@@ -49,15 +49,15 @@ public class FragmentHandler extends AppCompatActivity {
                 replaceFragment(new HomeFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.shorts){
+            if(item.getItemId() == R.id.history){
                 replaceFragment(new HistroyFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.subscriptions){
+            if(item.getItemId() == R.id.notification){
                 replaceFragment(new NotificationFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.library){
+            if(item.getItemId() == R.id.profile){
                 replaceFragment(new ProfileFragment());
                 return  true;
             }
