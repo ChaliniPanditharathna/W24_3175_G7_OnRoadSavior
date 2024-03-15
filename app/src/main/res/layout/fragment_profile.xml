@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:padding="20dp"
-        android:background="#1E407A">
+        android:background="#1E407A"
+        android:padding="20dp">
 
-    <ImageView
+        <ImageView
             android:id="@+id/imgViewProfileImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/user"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/user" />
 
         <TextView
             android:id="@+id/txtViewFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saubhagya Udani"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif"
-            android:layout_toRightOf="@+id/imgViewProfileImg"
             android:layout_centerVertical="true"
-            android:includeFontPadding="false"
             android:layout_marginLeft="10dp"
-            android:textColor="#ffffff"/>
+            android:layout_toRightOf="@+id/imgViewProfileImg"
+            android:fontFamily="sans-serif"
+            android:includeFontPadding="false"
+            android:text="Saubhagya Udani"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/txtViewUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sau_Udani"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:layout_toRightOf="@+id/imgViewProfileImg"
             android:layout_below="@+id/txtViewFullName"
             android:layout_marginLeft="10dp"
-            android:textColor="#ffffff"/>
+            android:layout_toRightOf="@+id/imgViewProfileImg"
+            android:fontFamily="sans-serif"
+            android:includeFontPadding="false"
+            android:text="Sau_Udani"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -69,8 +71,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/service"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/service" />
 
                 <TextView
                     android:id="@+id/txtViewServiceIconValueTxt"
@@ -80,8 +82,8 @@
                     android:fontFamily="sans-serif"
                     android:includeFontPadding="false"
                     android:text="55"
-                    android:textSize="20sp"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtViewServiceIconTxt"
@@ -91,8 +93,8 @@
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
                     android:text="Services"
-                    android:textSize="14sp"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -113,8 +115,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/rating"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/rating" />
 
                 <TextView
                     android:id="@+id/txtViewRatingIconValueTxt"
@@ -124,8 +126,8 @@
                     android:fontFamily="sans-serif"
                     android:includeFontPadding="false"
                     android:text="55"
-                    android:textSize="20sp"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtViewRatingIconTxt"
@@ -135,8 +137,8 @@
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
                     android:text="Services"
-                    android:textSize="14sp"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
@@ -144,91 +146,105 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:layout_marginTop="260dp"
         android:orientation="vertical"
-        android:layout_marginTop="260dp">
+        android:padding="20dp">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Full Name"
-            android:layout_marginBottom="10dp">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/name"
-                android:drawablePadding="10dp"
-                android:text="Saubhagya Udani">
+                android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputEditText>
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:layout_marginBottom="10dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Full Name">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/email"
-                android:drawablePadding="10dp"
-                android:text="saubhagya@gmail.com">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/name"
+                        android:drawablePadding="10dp"
+                        android:text="Saubhagya Udani">
 
-            </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputEditText>
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Contact Number"
-            android:layout_marginBottom="10dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/phone"
-                android:drawablePadding="10dp"
-                android:text="123456789">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Email">
 
-            </com.google.android.material.textfield.TextInputEditText>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/email"
+                        android:drawablePadding="10dp"
+                        android:text="saubhagya@gmail.com">
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Service Type"
-            android:layout_marginBottom="10dp">
+                    </com.google.android.material.textfield.TextInputEditText>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/servicetype"
-                android:drawablePadding="10dp"
-                android:text="Tow">
+                </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputEditText>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Contact Number">
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Location"
-            android:layout_marginBottom="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/phone"
+                        android:drawablePadding="10dp"
+                        android:text="123456789">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/location"
-                android:drawablePadding="10dp"
-                android:text="New Westminster">
+                    </com.google.android.material.textfield.TextInputEditText>
 
-            </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Service Type">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/servicetype"
+                        android:drawablePadding="10dp"
+                        android:text="Tow">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Location">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/location"
+                        android:drawablePadding="10dp"
+                        android:text="New Westminster">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-
 </RelativeLayout>
