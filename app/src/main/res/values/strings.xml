@@ -6,4 +6,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtAppName">OnRoad Savior</string>
     <string name="txtTagLine">Your Trusted Roadside Partner</string>
+    <string name="txtPromtUserType">Choose user type</string>
+    <string name="txtPromtServiceType">Choose service type</string>
+    <string-array name="user_types">
+        <item>Service Requester</item>
+        <item>Service Provider</item>
+    </string-array>
+    <string-array name="service_types">
+        <item>Tow</item>
+        <item>Lockout</item>
+        <item>Fuel Delivery</item>
+        <item>Tire Change</item>
+        <item>Jump Start</item>
+    </string-array>
 </resources>
