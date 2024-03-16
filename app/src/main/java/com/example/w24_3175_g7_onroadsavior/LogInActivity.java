@@ -32,7 +32,7 @@ public class LogInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LogInActivity.this, MainActivity.class));
+                startActivity(new Intent(LogInActivity.this, FragmentHandler.class));
             }
         });
     }
