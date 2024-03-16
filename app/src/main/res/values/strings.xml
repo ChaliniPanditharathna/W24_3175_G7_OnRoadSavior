@@ -6,6 +6,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtAppName">OnRoad Savior</string>
     <string name="txtTagLine">Your Trusted Roadside Partner</string>
+    <string name="UserName">User Name</string>
+    <string name="BreakDownTypeLabel">Break Down Type</string>
+    <string name="CreatedDateLabel">Created Date</string>
+    <string name="LocationLabel">Location</string>
+    <string name="BtnAcceptRequest">Accept</string>
+    <string name="BtnRejectRequest">Reject</string>
+    <string name="TextDescription">Description</string>
+    <string name="PhoneNoLabel">PhoneNo</string>
+    <string name="AcceptRequest">Accept</string>
     <string name="txtPromtUserType">Choose user type</string>
     <string name="txtPromtServiceType">Choose service type</string>
     <string-array name="user_types">
