@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -34,35 +35,37 @@ public class FragmentHandler extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        DBHelper dbHelper = new DBHelper(this);
+        dbHelper.addRequest();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
+           getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new ServiceProviderRequestFragment()).commit();
+           navigationView.setCheckedItem(R.id.nav_home);
 
         }
 
-        replaceFragment(new HomeFragment());
+        replaceFragment(new ServiceProviderRequestFragment());
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.home){
-                replaceFragment(new HomeFragment());
+                replaceFragment(new ServiceProviderRequestFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.shorts){
+            if(item.getItemId() == R.id.history){
                 replaceFragment(new HistroyFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.subscriptions){
+            if(item.getItemId() == R.id.notification){
                 replaceFragment(new NotificationFragment());
                 return  true;
             }
-            if(item.getItemId() == R.id.library){
+            if(item.getItemId() == R.id.profile){
                 replaceFragment(new ProfileFragment());
                 return  true;
             }
             return false;
         });
+
     }
 
     private void replaceFragment(Fragment fragment) {

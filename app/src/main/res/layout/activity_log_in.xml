@@ -72,6 +72,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/btnForgetPW"
             android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -82,6 +83,7 @@
             android:textColor="#000" />
 
         <Button
+            android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -91,6 +93,7 @@
             android:textColor="#fff" />
 
         <Button
+            android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
