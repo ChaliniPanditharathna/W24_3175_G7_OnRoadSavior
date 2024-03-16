@@ -57,7 +57,6 @@ public class LogInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(LogInActivity.this, MainActivity.class));
                 String email = txtInputUsername.getEditText().getText().toString();
                 String password = txtInputPassword.getEditText().getText().toString();
 
@@ -75,7 +74,7 @@ public class LogInActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            loadMainActivity(currentUser);
+            startApplication(currentUser);
         }
     }
     // [END on_start_check_user]
@@ -94,7 +93,7 @@ public class LogInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            loadMainActivity(user);
+                            startApplication(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -107,11 +106,11 @@ public class LogInActivity extends AppCompatActivity {
         // [END sign_in_with_email]
     }
 
-    private void loadMainActivity(FirebaseUser currentUser) {
+    private void startApplication(FirebaseUser currentUser) {
         String email = currentUser.getEmail();
         Bundle bundle = new Bundle();
         bundle.putString("EMAIL",email);
-        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+        Intent intent = new Intent(LogInActivity.this, FragmentHandler.class);
         intent.putExtras(bundle);
         startActivity(intent);
     }
