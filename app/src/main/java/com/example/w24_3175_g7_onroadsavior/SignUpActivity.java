@@ -28,6 +28,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    TextInputLayout regFullName, regUserName, regEmail, regContactNumber, regPassword;
+    Spinner userTypeSpinner, serviceTypeSpinner;
     String fullName, username, email, contactNumber, password, userType, serviceType;
 
     private static final String TAG = "EmailPassword";
@@ -43,13 +45,13 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //widgets
-        TextInputLayout regFullName = findViewById(R.id.name);
-        TextInputLayout regUserName = findViewById(R.id.username);
-        TextInputLayout regEmail = findViewById(R.id.email);
-        TextInputLayout regContactNumber = findViewById(R.id.contactNumber);
-        TextInputLayout regPassword = findViewById(R.id.password);
-        Spinner userTypeSpinner = findViewById(R.id.userTypeSpinner);
-        Spinner serviceTypeSpinner = findViewById(R.id.serviceTypeSpinner);
+        regFullName = findViewById(R.id.name);
+        regUserName = findViewById(R.id.username);
+        regEmail = findViewById(R.id.email);
+        regContactNumber = findViewById(R.id.contactNumber);
+        regPassword = findViewById(R.id.password);
+        userTypeSpinner = findViewById(R.id.userTypeSpinner);
+        serviceTypeSpinner = findViewById(R.id.serviceTypeSpinner);
 
         Button btnSignUp = findViewById(R.id.btnSignUp);
         Button btnBackToSignIn = findViewById(R.id.btnBackToSignIn);
@@ -80,6 +82,11 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //userInput validation
+                if(!isAllUserInputsValid()){
+                    return;
+                }
 
                 //get values
                 fullName = regFullName.getEditText().getText().toString();
@@ -115,42 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void generateUserRecord(String fullname, String userName, String email, String contactNumber, String password, String userType, String serviceType){
-
-        rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("Users");
-
-        DatabaseReference userNameRef = reference.child(email);
-        ValueEventListener eventListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if(!snapshot.exists()) {
-                    //create new user
-
-                    UserHelperClass user = new UserHelperClass(fullName, username, email, contactNumber, password, userType, serviceType);
-
-                    // Save the user data in the appropriate table based on userType
-                    reference.child(email).setValue(user);
-
-                    Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
-
-                    startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
-
-                } else {
-                    Toast.makeText(SignUpActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        userNameRef.addListenerForSingleValueEvent(eventListener);
-
-    }
+    //get Service Type
 
     public static String getServiceType(int pos){
 
@@ -177,6 +149,48 @@ public class SignUpActivity extends AppCompatActivity {
         return serviceType;
     }
 
+
+    //generate user record in firebase database
+    private void generateUserRecord(String uId, String fullName, String username, String email, String contactNumber, String password, String userType, String serviceType){
+
+        rootNode = FirebaseDatabase.getInstance();
+        reference = rootNode.getReference("uId");
+
+        DatabaseReference userNameRef = reference.child(uId);
+
+        ValueEventListener eventListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(!snapshot.exists()) {
+                    //create new user
+                    UserHelperClass user = new UserHelperClass(uId, fullName, username, email, contactNumber, password, userType, serviceType);
+
+                    // Save the user data in the appropriate table based on userType
+                    reference.child(uId).setValue(user);
+
+                    Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
+
+                    startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+
+                } else {
+                    Toast.makeText(SignUpActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+                Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+
+            }
+        };
+        userNameRef.addListenerForSingleValueEvent(eventListener);
+
+    }
+
+
     //When initializing Activity, check to see if the user is currently signed in
     // [START on_start_check_user]
     @Override
@@ -185,7 +199,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            loadMainActivity(currentUser);
+            redirectToLogin();
         }
     }
     // [END on_start_check_user]
@@ -202,7 +216,9 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            generateUserRecord(fullName, username, email, contactNumber, password, userType, serviceType);
+                            String uId = user.getUid();
+                            //String uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            generateUserRecord(uId, fullName, username, email, contactNumber, password, userType, serviceType);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -216,18 +232,131 @@ public class SignUpActivity extends AppCompatActivity {
         // [END create_user_with_email]
     }
 
-    private void loadMainActivity(FirebaseUser currentUser) {
-        String email = currentUser.getEmail();
-        Bundle bundle = new Bundle();
-        bundle.putString("EMAIL",email);
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+    private void redirectToLogin() {
+
+        startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
     }
 
     private void updateUI(FirebaseUser user) {
 
     }
 
+    //Validation - Ref: https://www.baeldung.com/
+    //user input validation - FullName
+    private Boolean validateFullName(){
 
+        String val = regFullName.getEditText().getText().toString();
+
+        if(val.isEmpty()) {
+            regFullName.setError("Field cannot be empty");
+            return false;
+        } else {
+            regFullName.setError(null);
+            regFullName.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //user input validation - Username
+    private Boolean validateUsername(){
+
+        String val = regUserName.getEditText().getText().toString();
+        String noWhiteSpace = "(?=\\s+$)";
+
+        if(val.isEmpty()) {
+            regUserName.setError("Field cannot be empty");
+            return false;
+        } else if (val.length() >= 15) {
+            regUserName.setError("Username too long");
+            return false;
+        } else if (val.contains(" ")) {
+            regUserName.setError("White spaces are not allowed");
+            return false;
+        } else {
+            regUserName.setError(null);
+            regUserName.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //user input validation - email
+    private Boolean validateEmail(){
+
+        String val = regEmail.getEditText().getText().toString();
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+        if(val.isEmpty()) {
+            regEmail.setError("Field cannot be empty");
+            return false;
+        } else if (!val.matches(regexPattern)){
+            regEmail.setError("Invalid Email address");
+            return false;
+        } else {
+            regEmail.setError(null);
+            regEmail.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //user input validation - Contact Number
+    private Boolean validateContactNumber(){
+
+        String val = regContactNumber.getEditText().getText().toString();
+        String contactNumRegex = "^\\d{10}$";
+
+        if(val.isEmpty()) {
+            regContactNumber.setError("Field cannot be empty");
+            return false;
+        } else if(!val.matches(contactNumRegex)){
+            regContactNumber.setError("Invalid contact number");
+            return false;
+        } else {
+            regContactNumber.setError(null);
+            regContactNumber.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //user input validation - Password
+    private Boolean validatePassword(){
+
+        String val = regPassword.getEditText().getText().toString();
+        String passWordVal = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,20}$";
+
+        /*
+            ^: indicates the string’s beginning
+            (?=.*[a-z]): makes sure that there is at least one small letter
+            (?=.*[A-Z]): needs at least one capital letter
+            (?=.*\\d): requires at least one digit
+            (?=.*[@#$%^&+=]): provides a guarantee of at least one special symbol
+            .{6,20}: imposes the minimum length of 6 characters and the maximum length of 20 characters
+            $: terminates the string
+
+            Test PW: Pw@123
+         */
+
+        if(val.isEmpty()) {
+            regPassword.setError("Field cannot be empty");
+            return false;
+        } else if (!val.matches(passWordVal)) {
+            regPassword.setError("Password should contain at least one simple letter, one capital letter, one digit, one special symbol and minimum length of 6 characters and the maximum length of 20 characters");
+            return false;
+        } else {
+            regPassword.setError(null);
+            regPassword.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //validate all user inputs
+    private Boolean isAllUserInputsValid(){
+
+        if(validateFullName() && validateUsername() && validateEmail() && validateContactNumber() && validatePassword()){
+
+            return true;
+        }
+
+        return false;
+    }
 }

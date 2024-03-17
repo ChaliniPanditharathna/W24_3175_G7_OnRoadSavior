@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +20,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -29,6 +32,8 @@ public class LogInActivity extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+
+    TextView txtViewInvalidCredentials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,8 @@ public class LogInActivity extends AppCompatActivity {
         TextInputLayout txtInputPassword = findViewById(R.id.password);
         Button btnSignIn = findViewById(R.id.btnSignIn);
         Button btnSignUp = findViewById(R.id.btnSignUp);
+        txtViewInvalidCredentials = findViewById(R.id.txtViewInvalidCredentials);
+        txtViewInvalidCredentials.setVisibility(View.GONE);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +90,8 @@ public class LogInActivity extends AppCompatActivity {
     //When a user signs in to the app, pass the user's email address and password to signInWithEmailAndPassword
     private void signIn(String email, String password) {
         // [START sign_in_with_email]
+        txtViewInvalidCredentials.setVisibility(View.GONE);
+
         mAuth.signInWithEmailAndPassword(email, password)
 
                 //setting a call back
@@ -99,7 +108,7 @@ public class LogInActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LogInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            txtViewInvalidCredentials.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -115,5 +124,4 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void updateUI(FirebaseUser user) {}
 }
