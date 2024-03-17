@@ -4,10 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.w24_3175_g7_onroadsavior.adapter.BreakdownTypeAdapter;
+import com.example.w24_3175_g7_onroadsavior.Model.BreakdownTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +39,14 @@ public class UserHomeFragment extends Fragment {
         ListView listViewBreakdownTypes = view.findViewById(R.id.listViewUserHome);
         BreakdownTypeAdapter breakdownTypeAdapter = new BreakdownTypeAdapter(breakdownTypesList);
         listViewBreakdownTypes.setAdapter(breakdownTypeAdapter);
-        //return inflater.inflate(R.layout.fragment_user_home, container, false);
+        listViewBreakdownTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                replaceFragment(new CurrentLocationFragment());
+            }
+        });
+
         return view;
     }
 
@@ -44,5 +57,12 @@ public class UserHomeFragment extends Fragment {
                     breakdownTypeIcon.get(i));
             breakdownTypesList.add(eachBreakdownType);
         }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
