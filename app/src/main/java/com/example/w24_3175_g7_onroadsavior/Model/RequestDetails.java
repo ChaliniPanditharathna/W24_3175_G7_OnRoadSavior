@@ -1,6 +1,7 @@
 package com.example.w24_3175_g7_onroadsavior.Model;
 
 public class RequestDetails {
+    private String breakDownRequestId;
     private String breakDownType;
     private String location;
     private String description;
@@ -15,7 +16,7 @@ public class RequestDetails {
     private String phoneNo;
 
     public RequestDetails(){}
-    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, int userId, int providerId, String userName, String phoneNo) {
+    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, int userId, int providerId, String userName, String phoneNo, String breakDownRequestId) {
         this.breakDownType = breakDownType;
         this.location = location;
         this.description = description;
@@ -26,6 +27,15 @@ public class RequestDetails {
         this.providerId = providerId;
         this.userName = userName;
         this.phoneNo = phoneNo;
+        this.breakDownRequestId = breakDownRequestId;
+    }
+
+    public String getBreakDownRequestId() {
+        return breakDownRequestId;
+    }
+
+    public void setBreakDownRequestId(String breakDownRequestId) {
+        this.breakDownRequestId = breakDownRequestId;
     }
 
     public String getBreakDownType() {

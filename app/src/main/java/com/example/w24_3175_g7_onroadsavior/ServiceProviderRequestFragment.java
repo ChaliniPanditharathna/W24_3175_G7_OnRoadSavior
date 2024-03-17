@@ -69,9 +69,7 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
 
     public void displayData(){
         Cursor cursor  = dbHelper.getRequestData();
-        Log.println(Log.VERBOSE, "Hello", String.valueOf(cursor.getCount()));
         if(cursor.getCount()==0){
-            Log.println(Log.VERBOSE, "Hello saoi", String.valueOf(cursor.getCount()));
             Toast.makeText(ServiceProviderRequestFragment.this.getContext(), "No entry exists", Toast.LENGTH_SHORT).show();
              return;
         } else {
@@ -89,7 +87,9 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
                         cursor.getInt(6),
                         cursor.getInt(7),
                         cursor.getString(8),
-                        cursor.getString(9)
+                        cursor.getString(9),
+                        cursor.getString(10)
+
                 );
                 requestDetails.add(req);
 
@@ -108,9 +108,10 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         result.putString("CREATEDDATE",req.getCreatedDate() );
         result.putString("LOCATION",req.getLocation());
         result.putString("DESCRIPTION",req.getDescription() );
+        result.putString("BREAKDOWNREQUESTID",req.getBreakDownRequestId());
+
         Fragment userRequestAcceptFragment = new UserRequestAcceptFragment();
         userRequestAcceptFragment.setArguments(result);
-
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_layout, userRequestAcceptFragment);
