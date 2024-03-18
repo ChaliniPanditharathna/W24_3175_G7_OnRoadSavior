@@ -34,7 +34,7 @@ public class UserHomeFragment extends Fragment {
         // Inflate the layout for this fragment
         loadDataModel();
         View view = inflater.inflate(R.layout.fragment_user_home, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.idRecuclerViewUserHome);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewUserHome);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
