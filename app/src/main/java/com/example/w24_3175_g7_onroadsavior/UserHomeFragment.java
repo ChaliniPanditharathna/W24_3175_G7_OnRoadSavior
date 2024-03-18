@@ -4,15 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.w24_3175_g7_onroadsavior.adapter.BreakdownTypeAdapter;
+import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownType;
 import com.example.w24_3175_g7_onroadsavior.Model.BreakdownTypes;
 
 import java.util.ArrayList;
@@ -34,19 +34,16 @@ public class UserHomeFragment extends Fragment {
         // Inflate the layout for this fragment
         loadDataModel();
         View view = inflater.inflate(R.layout.fragment_user_home, container, false);
-        ImageView imageView =view.findViewById(R.id.imageViewUserHome);
-        imageView.setImageResource(R.drawable.bannerassistance);
-        ListView listViewBreakdownTypes = view.findViewById(R.id.listViewUserHome);
-        BreakdownTypeAdapter breakdownTypeAdapter = new BreakdownTypeAdapter(breakdownTypesList);
-        listViewBreakdownTypes.setAdapter(breakdownTypeAdapter);
-        listViewBreakdownTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        RecyclerView recyclerView = view.findViewById(R.id.idRecuclerViewUserHome);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                replaceFragment(new CurrentLocationFragment());
-            }
+        AdapterBreakdownType adapterBreakdownType = new AdapterBreakdownType(breakdownTypesList, position -> {
+            Toast.makeText(getContext(), breakdownTypesList.get(position).getBreakdownType(), Toast.LENGTH_SHORT).show();
+            replaceFragment(new CurrentLocationFragment());
         });
-
+        recyclerView.setAdapter(adapterBreakdownType);
+        // return inflater.inflate(R.layout.fragment_test, container, false);
         return view;
     }
 
