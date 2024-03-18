@@ -28,4 +28,8 @@
         <item>Tire Change</item>
         <item>Jump Start</item>
     </string-array>
+    <string name="textViewTitleUserHome">How Can We Help You?</string>
+    <string name="imgUserHomeContentDesc">User Home Image</string>
+    <string name="textViewCurrentLocation">Current Location</string>
+    <string name="buttonGetLocation">Get Location</string>
 </resources>
