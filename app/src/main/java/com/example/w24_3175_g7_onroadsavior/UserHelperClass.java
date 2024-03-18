@@ -2,6 +2,7 @@ package com.example.w24_3175_g7_onroadsavior;
 
 public class UserHelperClass {
 
+    private  String uID;
     private String fullName;
     private String userName;
     private String email;
@@ -11,6 +12,17 @@ public class UserHelperClass {
     private String serviceType;
 
     //constructors
+
+    public UserHelperClass(String uID, String fullName, String userName, String email, String contactNumber, String password, String userType, String serviceType) {
+        this.uID = uID;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.password = password;
+        this.userType = userType;
+        this.serviceType = serviceType;
+    }
 
     public UserHelperClass(String fullName, String userName, String email, String contactNumber, String password, String userType, String serviceType) {
         this.fullName = fullName;
@@ -30,6 +42,14 @@ public class UserHelperClass {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public String getuID() {
+        return uID;
+    }
+
+    public void setuID(String uID) {
+        this.uID = uID;
     }
 
     public void setFullName(String fullName) {
