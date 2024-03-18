@@ -10,10 +10,11 @@ public class UserHelperClass {
     private String password;
     private String userType;
     private String serviceType;
+    private String location;
 
     //constructors
 
-    public UserHelperClass(String uID, String fullName, String userName, String email, String contactNumber, String password, String userType, String serviceType) {
+    public UserHelperClass(String uID, String fullName, String userName, String email, String contactNumber, String password, String userType, String location, String serviceType) {
         this.uID = uID;
         this.fullName = fullName;
         this.userName = userName;
@@ -21,6 +22,7 @@ public class UserHelperClass {
         this.contactNumber = contactNumber;
         this.password = password;
         this.userType = userType;
+        this.location = location;
         this.serviceType = serviceType;
     }
 
@@ -102,5 +104,13 @@ public class UserHelperClass {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
