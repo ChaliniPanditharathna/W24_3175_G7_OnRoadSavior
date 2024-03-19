@@ -19,6 +19,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 
 public class UploadImageFragment extends Fragment {
@@ -28,6 +35,8 @@ public class UploadImageFragment extends Fragment {
     private Button buttonUploadImage;
 
     Uri image;
+
+    private String imageUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +52,25 @@ public class UploadImageFragment extends Fragment {
         buttonUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference();
 
+                UploadTask uploadTask = storageRef.child("images/" + UUID.randomUUID().toString()).putFile(image);
+
+                uploadTask.addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(), "Image upload failed! Please try again..", Toast.LENGTH_LONG).show();
+
+                }).addOnSuccessListener(taskSnapshot -> {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    Toast.makeText(getContext(), "Image uploaded Successfully.", Toast.LENGTH_LONG).show();
+
+                    buttonUploadImage.setEnabled(false);
+
+                    imageUrl = taskSnapshot.getStorage().toString();
+                });
             }
         });
 
