@@ -157,13 +157,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //db.execSQL("INSERT INTO ServiceProvider (uID, Name, Username, Email, Phone_NO, Password, Location, BreakDownType, Created_Date) VALUES ('Service Provider 1', 'provider1', 'provider1@example.com', '0987654321', '2024-03-12', 'Plumbing', 'providerpass')\n");
 
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 1, 1, 'Plumbing', '14820 90B Avenue, Surrey, BC', 'Issue Description', NULL, 'Pending')\n");
+        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '5utKiBSA4Ec60prqeE1kGs56uq63', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'Issue Description', NULL, 'Pending')\n");
 
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 1, 1, 'Plumbing', '543 90B Avenue, Burnaby, BC', 'Issue Description', NULL, 'Pending')\n");
-
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 1, 1, 'Plumbing', '56 78B, New Westminister, BC', 'Issue Description', NULL, 'Pending')\n");
-
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 1, 1, 'Plumbing', '167, Freser Hyway, BC', 'Issue Description', NULL, 'Pending')\n");
 
     }
 
