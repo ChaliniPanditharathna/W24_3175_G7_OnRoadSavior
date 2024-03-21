@@ -1,16 +1,24 @@
 package com.example.w24_3175_g7_onroadsavior;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DatabaseReference.CompletionListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -28,10 +37,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
-    TextInputLayout regFullName, regUserName, regEmail, regContactNumber, regPassword;
+    TextInputLayout regFullName, regUserName, regEmail, regContactNumber, regPassword, regLocation;
     Spinner userTypeSpinner, serviceTypeSpinner;
-    String fullName, username, email, contactNumber, password, userType, serviceType;
-
+    RecyclerView placesRecyclerView;
+    String fullName, username, email, contactNumber, password, userType, location, serviceType;
     private static final String TAG = "EmailPassword";
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -51,6 +60,8 @@ public class SignUpActivity extends AppCompatActivity {
         regContactNumber = findViewById(R.id.contactNumber);
         regPassword = findViewById(R.id.password);
         userTypeSpinner = findViewById(R.id.userTypeSpinner);
+
+        regLocation = findViewById(R.id.location);
         serviceTypeSpinner = findViewById(R.id.serviceTypeSpinner);
 
         Button btnSignUp = findViewById(R.id.btnSignUp);
@@ -63,9 +74,12 @@ public class SignUpActivity extends AppCompatActivity {
 
                 //service requester
                 if(position == 0){
+                    regLocation.setVisibility(View.GONE);
                     serviceTypeSpinner.setVisibility(View.GONE);
                 } else if (position == 1) {
+                    regLocation.setVisibility(View.VISIBLE);
                     serviceTypeSpinner.setVisibility(View.VISIBLE);
+
                 }
 
             }
@@ -100,13 +114,15 @@ public class SignUpActivity extends AppCompatActivity {
                 if (userTypeInd == 0){
                     userType = "Service Requester";
                     serviceType = "";
+                    location = "";
                 } else if (userTypeInd == 1){
                     userType = "Service Provider";
+                    location = regLocation.getEditText().getText().toString();
                     int serviceTypeInd = serviceTypeSpinner.getSelectedItemPosition();
                     serviceType = getServiceType(serviceTypeInd);
                 }
 
-                createAccount(email, password, fullName, username, contactNumber, userType, serviceType);
+                createAccount(email, password, fullName, username, contactNumber, userType, location, serviceType);
             }
 
         });
@@ -118,12 +134,11 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
             }
         });
-
-
     }
 
-    //get Service Type
 
+
+    //get Service Type
     public static String getServiceType(int pos){
 
         String serviceType = "";
@@ -151,10 +166,10 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     //generate user record in firebase database
-    private void generateUserRecord(String uId, String fullName, String username, String email, String contactNumber, String password, String userType, String serviceType){
+    private void generateUserRecord(String uId, String fullName, String username, String email, String contactNumber, String password, String userType, String location, String serviceType){
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("uId");
+        reference = rootNode.getReference("User");
 
         DatabaseReference userNameRef = reference.child(uId);
 
@@ -165,14 +180,22 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if(!snapshot.exists()) {
                     //create new user
-                    UserHelperClass user = new UserHelperClass(uId, fullName, username, email, contactNumber, password, userType, serviceType);
+                    UserHelperClass user = new UserHelperClass(uId, fullName, username, email, contactNumber, password, userType, location, serviceType);
 
                     // Save the user data in the appropriate table based on userType
-                    reference.child(uId).setValue(user);
+                    reference.child(uId).setValue(user, new CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
 
-                    Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
-
-                    startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                            if(error == null) {
+                                Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                            }
+                            else {
+                                Toast.makeText(SignUpActivity.this, "Error occurred while registering user", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
                 } else {
                     Toast.makeText(SignUpActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
@@ -206,7 +229,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     //Create a new account by passing the new user's email address and password to createUserWithEmailAndPassword
-    private void createAccount(String email, String password, String fullName, String username, String contactNumber, String userType, String serviceType) {
+    private void createAccount(String email, String password, String fullName, String username, String contactNumber, String userType, String location, String serviceType) {
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -217,13 +240,12 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             String uId = user.getUid();
-                            //String uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            generateUserRecord(uId, fullName, username, email, contactNumber, password, userType, serviceType);
+                            generateUserRecord(uId, fullName, username, email, contactNumber, password, userType, location, serviceType);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                            Toast.makeText(SignUpActivity.this, "Sign Up failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
