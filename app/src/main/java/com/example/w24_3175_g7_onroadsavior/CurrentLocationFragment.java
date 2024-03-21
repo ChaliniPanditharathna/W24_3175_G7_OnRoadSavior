@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
     Button buttonLocation;
     TextView textViewLocation;
     LocationManager locationManager;
+    Button btnNext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +46,7 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         imageView.setImageResource(R.drawable.currentplace);
         textViewLocation = view.findViewById(R.id.textViewCurrentLocationId);
         buttonLocation = view.findViewById(R.id.buttonCurrentLocation);
+        btnNext = view.findViewById(R.id.buttonNextCurrentLocation);
 
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
@@ -57,6 +61,13 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
             @Override
             public void onClick(View v) {
                 getLocation();
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new UploadImageFragment());
             }
         });
         return view;
@@ -102,5 +113,12 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
     @Override
     public void onProviderDisabled(@NonNull String provider) {
         LocationListener.super.onProviderDisabled(provider);
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }

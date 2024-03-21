@@ -44,4 +44,8 @@ dependencies {
 
     // Add the dependency for the Firebase Authentication library
     implementation("com.google.firebase:firebase-auth")
+
+    // Firebase storage
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-messaging:23.3.1")
 }

@@ -31,5 +31,7 @@
     <string name="textViewTitleUserHome">How Can We Help You?</string>
     <string name="imgUserHomeContentDesc">User Home Image</string>
     <string name="textViewCurrentLocation">Current Location</string>
-    <string name="buttonGetLocation">Get Location</string>
+    <string name="buttonGetLocation">Get Current Location</string>
+    <string name="txtUploadImage">Upload Image</string>
+    <string name="btnNextCurrentLocation">Next</string>
 </resources>
