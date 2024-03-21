@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class FragmentHandler extends AppCompatActivity {
 
@@ -23,10 +26,22 @@ public class FragmentHandler extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
 
+    private FirebaseAuth mAuth;
+    DBHelper DB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation_bar);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null){
+            redirectToLogin();
+            return;
+        }
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -35,32 +50,34 @@ public class FragmentHandler extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        DBHelper dbHelper = new DBHelper(this);
-        dbHelper.addRequest();
+
+        DB = new DBHelper(this);
+
+
         if (savedInstanceState == null) {
            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new ServiceProviderRequestFragment()).commit();
            navigationView.setCheckedItem(R.id.nav_home);
 
         }
 
-        replaceFragment(new ServiceProviderRequestFragment());
+        replaceFragment(new ServiceProviderRequestFragment(), currentUser);
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.home){
-                replaceFragment(new ServiceProviderRequestFragment());
+                replaceFragment(new ServiceProviderRequestFragment(), currentUser);
                 return  true;
             }
             if(item.getItemId() == R.id.history){
-                replaceFragment(new HistroyFragment());
+                replaceFragment(new HistroyFragment(), currentUser);
                 return  true;
             }
             if(item.getItemId() == R.id.notification){
-                replaceFragment(new NotificationFragment());
+                replaceFragment(new NotificationFragment(), currentUser);
                 return  true;
             }
             if(item.getItemId() == R.id.profile){
-                replaceFragment(new ProfileFragment());
+                replaceFragment(new ProfileFragment(), currentUser);
                 return  true;
             }
             return false;
@@ -68,10 +85,21 @@ public class FragmentHandler extends AppCompatActivity {
 
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, FirebaseUser currentUser) {
+
+        Bundle args = new Bundle();
+        args.putParcelable("CURRENT_USER", currentUser);
+        fragment.setArguments(args);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(FragmentHandler.this, LogInActivity.class);
+        startActivity(intent);
     }
 }

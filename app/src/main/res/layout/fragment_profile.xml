@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="170dp"
         android:background="#1E407A"
         android:padding="20dp">
 
@@ -30,7 +30,6 @@
             android:layout_toRightOf="@+id/imgViewProfileImg"
             android:fontFamily="sans-serif"
             android:includeFontPadding="false"
-            android:text="Saubhagya Udani"
             android:textColor="#ffffff"
             android:textSize="20sp" />
 
@@ -43,7 +42,6 @@
             android:layout_toRightOf="@+id/imgViewProfileImg"
             android:fontFamily="sans-serif"
             android:includeFontPadding="false"
-            android:text="Sau_Udani"
             android:textColor="#ffffff"
             android:textSize="14sp" />
     </RelativeLayout>
@@ -56,7 +54,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="100dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#1E407A"
@@ -100,7 +98,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="100dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#1E407A"
@@ -167,11 +165,11 @@
                     android:hint="Full Name">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextFullName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/name"
-                        android:drawablePadding="10dp"
-                        android:text="Saubhagya Udani">
+                        android:drawablePadding="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
@@ -184,11 +182,11 @@
                     android:hint="Email">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/email"
-                        android:drawablePadding="10dp"
-                        android:text="saubhagya@gmail.com">
+                        android:drawablePadding="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
@@ -201,11 +199,11 @@
                     android:hint="Contact Number">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextContactNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/phone"
-                        android:drawablePadding="10dp"
-                        android:text="123456789">
+                        android:drawablePadding="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
@@ -218,11 +216,11 @@
                     android:hint="Service Type">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextServiceType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/servicetype"
-                        android:drawablePadding="10dp"
-                        android:text="Tow">
+                        android:drawablePadding="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
@@ -235,11 +233,11 @@
                     android:hint="Location">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/location"
-                        android:drawablePadding="10dp"
-                        android:text="New Westminster">
+                        android:drawablePadding="10dp">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
