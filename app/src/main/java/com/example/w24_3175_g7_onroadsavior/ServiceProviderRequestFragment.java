@@ -73,9 +73,6 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
             Toast.makeText(ServiceProviderRequestFragment.this.getContext(), "No entry exists", Toast.LENGTH_SHORT).show();
              return;
         } else {
-
-
-
             while(cursor.moveToNext()){
                RequestDetails req = new RequestDetails(
                         cursor.getString(0),

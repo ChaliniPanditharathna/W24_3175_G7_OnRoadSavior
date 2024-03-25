@@ -1,7 +1,11 @@
 package com.example.w24_3175_g7_onroadsavior;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -58,20 +64,75 @@ public class UserRequestAcceptFragment extends Fragment {
             @Override
             public void onClick(View v) {
                dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId));
-               Toast.makeText(v.getContext(), "Successfully accept the Request", Toast.LENGTH_SHORT).show();
+                String message = "Hi, Accept your request by service provider. Thank you.";
                 btnReject.setEnabled(false);
+                Activity activity = requireActivity();
+                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                    sendSMS(String.valueOf(txtPhoneNo), v, message);
+                } else {
+                    if(v.getContext() !=null){
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 100);
+                    }
+                }
+
+                Bundle result = new Bundle();;
+                result.putString("USERNAME",username );
+                result.putString("BREAKDOWNTYPE",breakDownType);
+                result.putString("PHONENO",phoneNo);
+                result.putString("CREATEDDATE",createdDate );
+                result.putString("LOCATION",location);
+                result.putString("DESCRIPTION",description );
+                result.putString("MESSAGE","Successfully accept the request" );
+                result.putString("ACTION","Accept" );
+                Fragment userRequestFragment = new UserRequestFragment();
+                userRequestFragment.setArguments(result);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_layout, userRequestFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
             }
+
         });
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dbHelper.rejectRequest(Integer.parseInt(breakDownRequestId));
-                Toast.makeText(v.getContext(), "Successfully reject the Request", Toast.LENGTH_SHORT).show();
                 btnAccept.setEnabled(false);
+                String message = "Hi, Reject your request by provider. Thank you.";
+                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                    sendSMS(String.valueOf(txtPhoneNo), v, message);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
+                }
+                btnAccept.setVisibility(View.INVISIBLE);
+                Bundle result = new Bundle();;
+                result.putString("USERNAME",username );
+                result.putString("BREAKDOWNTYPE",breakDownType);
+                result.putString("PHONENO",phoneNo);
+                result.putString("CREATEDDATE",createdDate );
+                result.putString("LOCATION",location);
+                result.putString("DESCRIPTION",description );
+                result.putString("MESSAGE","Successfully reject the request" );
+                result.putString("ACTION","Reject" );
+
+                Fragment userRequestFragment = new UserRequestFragment();
+                userRequestFragment.setArguments(result);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_layout, userRequestFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
 
         return  v;
+    }
+    private void sendSMS(String txtPhoneNo, View v, String message){
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage("6725580280", null, message, null, null);
+        Toast.makeText(v.getContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();
     }
 }
