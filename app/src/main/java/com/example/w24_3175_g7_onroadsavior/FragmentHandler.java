@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,22 +63,35 @@ public class FragmentHandler extends AppCompatActivity {
 
         replaceFragment(new ServiceProviderRequestFragment(), currentUser);
 
+        FloatingActionButton fab = findViewById(R.id.fab_emergency);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FragmentHandler.this, EmergencyActivity.class);
+                startActivity(intent);
+            }
+        });
+
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.home){
                 replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+                fab.setVisibility(View.VISIBLE);
                 return  true;
             }
             if(item.getItemId() == R.id.history){
                 replaceFragment(new HistroyFragment(), currentUser);
+                fab.setVisibility(View.GONE);
                 return  true;
             }
             if(item.getItemId() == R.id.notification){
                 replaceFragment(new NotificationFragment(), currentUser);
+                fab.setVisibility(View.GONE);
                 return  true;
             }
             if(item.getItemId() == R.id.profile){
                 replaceFragment(new ProfileFragment(), currentUser);
+                fab.setVisibility(View.GONE);
                 return  true;
             }
             return false;
