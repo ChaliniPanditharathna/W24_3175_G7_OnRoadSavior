@@ -34,4 +34,5 @@
     <string name="buttonGetLocation">Get Current Location</string>
     <string name="txtUploadImage">Upload Image</string>
     <string name="btnNextCurrentLocation">Next</string>
+    <string name="txtEmergency">Emergency</string>
 </resources>

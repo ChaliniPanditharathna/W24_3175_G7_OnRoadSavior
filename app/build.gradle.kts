@@ -48,4 +48,10 @@ dependencies {
     // Firebase storage
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-messaging:23.3.1")
+
+    //Circular Image
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    //Keep Profile Picture
+    implementation("com.squareup.picasso:picasso:2.71828")
 }
