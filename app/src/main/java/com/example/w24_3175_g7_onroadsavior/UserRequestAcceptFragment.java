@@ -6,10 +6,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +33,8 @@ import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
  */
 public class UserRequestAcceptFragment extends Fragment {
 
-
+    StorageReference storageReference;
+    FirebaseStorage storage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,8 +50,10 @@ public class UserRequestAcceptFragment extends Fragment {
         TextView txtPhoneNo = v.findViewById(R.id.textViewPhoneNo);
         Button btnAccept = v.findViewById(R.id.buttonAcceptRequest);
         Button btnReject = v.findViewById(R.id.buttonRejectRequest);
+        ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
         Bundle bundle = this.getArguments();
         String username = bundle.getString("USERNAME");
+        String userId = bundle.getString("USERID");
         String phoneNo = bundle.getString("PHONENO");
         String createdDate = bundle.getString("CREATEDDATE");
         String location = bundle.getString("LOCATION");
@@ -60,6 +68,22 @@ public class UserRequestAcceptFragment extends Fragment {
         txtCreatedDate.setText(createdDate);
         txtPhoneNo.setText(phoneNo);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        StorageReference profileImageRef = storageReference.child("profile_images/" +userId+ ".jpg");
+
+        // Check if the ImageView is not null before loading the image
+        if (userPic != null) {
+            profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                // Load the profile image using Picasso
+                Picasso.get().load(uri).into(userPic);
+            }).addOnFailureListener(exception -> {
+                // Handle failure to load profile image
+                Log.e("UserRequestAcceptFragment", "Failed to load profile image: " + exception.getMessage());
+            });
+        } else {
+            Log.e("UserRequestAcceptFragment", "ImageView is null");
+        }
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,12 +101,13 @@ public class UserRequestAcceptFragment extends Fragment {
 
                 Bundle result = new Bundle();;
                 result.putString("USERNAME",username );
+                result.putString("USERID",userId );
                 result.putString("BREAKDOWNTYPE",breakDownType);
                 result.putString("PHONENO",phoneNo);
                 result.putString("CREATEDDATE",createdDate );
                 result.putString("LOCATION",location);
                 result.putString("DESCRIPTION",description );
-                result.putString("MESSAGE","Successfully accept the request" );
+                result.putString("MESSAGE","Accepted" );
                 result.putString("ACTION","Accept" );
                 Fragment userRequestFragment = new UserRequestFragment();
                 userRequestFragment.setArguments(result);
@@ -109,12 +134,13 @@ public class UserRequestAcceptFragment extends Fragment {
                 btnAccept.setVisibility(View.INVISIBLE);
                 Bundle result = new Bundle();;
                 result.putString("USERNAME",username );
+                result.putString("USERID",userId );
                 result.putString("BREAKDOWNTYPE",breakDownType);
                 result.putString("PHONENO",phoneNo);
                 result.putString("CREATEDDATE",createdDate );
                 result.putString("LOCATION",location);
                 result.putString("DESCRIPTION",description );
-                result.putString("MESSAGE","Successfully reject the request" );
+                result.putString("MESSAGE","Rejected" );
                 result.putString("ACTION","Reject" );
 
                 Fragment userRequestFragment = new UserRequestFragment();
