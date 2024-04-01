@@ -1,290 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserRequestAcceptFragment">
+    android:fillViewport="true">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <ImageView
-        android:id="@+id/imageViewUserIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="52dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_account_circle_24" />
-
-    <TextView
-        android:id="@+id/textViewUserName"
-        android:layout_width="159dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="52dp"
-        android:text="@string/hello_blank_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewPhoneNo"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLocationIcon"
-        app:layout_constraintVertical_bias="0.0" />
+        android:padding="16dp">
+        <!-- Profile Image -->
 
-    <ImageView
-        android:id="@+id/imageViewBreakDownIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUserIcon"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/breakdownicon" />
+        <!-- User Name -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewUserIcon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/baseline_account_circle_24"
+            app:civ_border_width="2dp" />
 
-    <TextView
-        android:id="@+id/textViewBreakDownType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUserIcon"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_below="@id/imageViewUserIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp" />
 
-    <ImageView
-        android:id="@+id/imageViewCreatedDate"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewDecriptionIcon"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_date_range_24" />
+        <!-- Breakdown Image -->
+        <ImageView
+            android:id="@+id/imageViewBreakDown"
+            android:layout_width="240dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/textViewUserName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/vehiclebreakdown" />
 
-    <TextView
-        android:id="@+id/textViewCreatedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewDecriptionIcon"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:id="@+id/infoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageViewBreakDown"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imageViewLocationIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewBreakDownIcon"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_location_on_24" />
 
-    <TextView
-        android:id="@+id/textViewLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewBreakDownIcon"
-        app:layout_constraintVertical_bias="0.0" />
+            <ImageView
+                android:id="@+id/imageViewBreakDownIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/breakdownicon" />
 
-    <ImageView
-        android:id="@+id/imageViewDecriptionIcon"
-        android:layout_width="30dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewPhoneIcon"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_description_24" />
+            <TextView
+                android:id="@+id/textViewBreakDownType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Breakdown Type"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewPhoneIcon"
-        app:layout_constraintVertical_bias="0.0" />
+            <ImageView
+                android:id="@+id/imageViewPhoneIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/baseline_phone_24" />
 
-    <ImageView
-        android:id="@+id/imageViewPhoneIcon"
-        android:layout_width="30dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLocationIcon"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_phone_24" />
+            <TextView
+                android:id="@+id/textViewPhoneNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Phone Number"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/buttonAcceptRequest"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="#000"
-        android:text="@string/AcceptRequest"
-        android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.145"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.808" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonRejectRequest"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="#000"
-        android:text="@string/BtnRejectRequest"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.781"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.808" />
+        <LinearLayout
+            android:id="@+id/infoLayoutTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/infoLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="20dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+            <ImageView
+                android:id="@+id/imageViewCreatedDate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_date_range_24" />
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="20dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2"
-        app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/textViewCreatedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/cardview_dark_background"/>
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="20dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3"
-        app:layout_constraintVertical_bias="0.0" />
+            <ImageView
+                android:id="@+id/imageViewLocationIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/baseline_location_on_24" />
 
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.592"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <View
-        android:id="@+id/divider6"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="20dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider5"
-        app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Location"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="16sp" />
 
-    <View
-        android:id="@+id/divider7"
-        android:layout_width="384dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="20dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider6"
-        app:layout_constraintVertical_bias="0.0" />
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infoLayoutTwo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/buttonAcceptRequest"
+            android:layout_width="312dp"
+            android:layout_height="63dp"
+            android:backgroundTint="#1E407A"
+            android:layout_below="@+id/imageViewBreakDown"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:background="@color/material_dynamic_primary30"
+            android:text="@string/AcceptRequest"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/buttonRejectRequest"
+            android:layout_width="315dp"
+            android:layout_height="63dp"
+            android:backgroundTint="#1E407A"
+            android:layout_below="@+id/buttonAcceptRequest"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:background="@color/material_dynamic_primary30"
+            android:text="@string/BtnRejectRequest"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+</ScrollView>

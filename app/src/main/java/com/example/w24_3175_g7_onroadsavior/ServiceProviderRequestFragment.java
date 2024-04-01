@@ -1,5 +1,6 @@
 package com.example.w24_3175_g7_onroadsavior;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.Interface.ProviderRequestInterface;
 import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,6 +37,8 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
     ArrayList<RequestDetails> requestDetails;
     DBHelper dbHelper;
     ProviderRequetsAdapter requetsAdapter;
+
+
 
 
     @Override
@@ -81,13 +88,14 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
                         cursor.getString(3),
                         cursor.getString(4),
                         cursor.getString(5),
-                        cursor.getInt(6),
-                        cursor.getInt(7),
+                        cursor.getString(6),
+                        cursor.getString(7),
                         cursor.getString(8),
                         cursor.getString(9),
                         cursor.getString(10)
 
                 );
+
                 requestDetails.add(req);
 
             }
@@ -99,6 +107,7 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         Bundle result = new Bundle();
         RequestDetails req = requestDetails.get(position);
         result.putString("USERNAME",req.getUserName() );
+        result.putString("USERID",req.getUserId() );
         result.putString("BREAKDOWNTYPE",req.getBreakDownType());
 
         result.putString("PHONENO",req.getPhoneNo());
@@ -115,4 +124,5 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 }

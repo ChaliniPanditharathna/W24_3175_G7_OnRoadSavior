@@ -8,15 +8,15 @@ public class RequestDetails {
     private String createdDate;
     private String updateDate;
     private String image;
-    private int userId;
-    private int providerId;
+    private String userId;
+    private String providerId;
 
     private String userName;
 
     private String phoneNo;
 
     public RequestDetails(){}
-    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, int userId, int providerId, String userName, String phoneNo, String breakDownRequestId) {
+    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, String userId, String providerId, String userName, String phoneNo, String breakDownRequestId) {
         this.breakDownType = breakDownType;
         this.location = location;
         this.description = description;
@@ -86,19 +86,19 @@ public class RequestDetails {
         this.image = image;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public int getProviderId() {
+    public String getProviderId() {
         return providerId;
     }
 
-    public void setProviderId(int providerId) {
+    public void setProviderId(String providerId) {
         this.providerId = providerId;
     }
 
