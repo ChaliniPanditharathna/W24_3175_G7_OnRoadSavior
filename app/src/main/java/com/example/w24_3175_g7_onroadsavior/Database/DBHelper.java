@@ -158,6 +158,8 @@ public class DBHelper extends SQLiteOpenHelper {
         //db.execSQL("INSERT INTO ServiceProvider (uID, Name, Username, Email, Phone_NO, Password, Location, BreakDownType, Created_Date) VALUES ('Service Provider 1', 'provider1', 'provider1@example.com', '0987654321', '2024-03-12', 'Plumbing', 'providerpass')\n");
 
         db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
+        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Wheel', '16833 162A Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Done')\n");
+        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Tire', '3422 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
 
 
     }
@@ -165,7 +167,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getRequestData(){
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Pending'", null);
+                "u.Name,u.Phone_No, b.ID, b.Status  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Pending' OR Status ='Accept' ", null);
+        return  cursor;
+    }
+    public Cursor getRequestHistoryData(){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
+                "u.Name,u.Phone_No, b.ID, b.Status  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject'", null);
         return  cursor;
     }
 

@@ -38,6 +38,7 @@ public class FragmentHandler extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if(currentUser == null){
             redirectToLogin();
             return;
@@ -53,8 +54,7 @@ public class FragmentHandler extends AppCompatActivity {
         toggle.syncState();
 
         DB = new DBHelper(this);
-
-
+        UserHelperClass user = DB.getUserData(currentUser.getUid());
         if (savedInstanceState == null) {
            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new ServiceProviderRequestFragment()).commit();
            navigationView.setCheckedItem(R.id.nav_home);
@@ -80,7 +80,12 @@ public class FragmentHandler extends AppCompatActivity {
                 return  true;
             }
             if(item.getItemId() == R.id.history){
-                replaceFragment(new HistroyFragment(), currentUser);
+                if(user.getUserType().equalsIgnoreCase("Service Provider")){
+                    replaceFragment(new ProviderRequestsHistoryFragment(), currentUser);
+                }
+                if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                    replaceFragment(new HistroyFragment(), currentUser);
+                }
                 fab.setVisibility(View.GONE);
                 return  true;
             }
