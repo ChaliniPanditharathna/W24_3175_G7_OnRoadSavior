@@ -157,9 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //db.execSQL("INSERT INTO ServiceProvider (uID, Name, Username, Email, Phone_NO, Password, Location, BreakDownType, Created_Date) VALUES ('Service Provider 1', 'provider1', 'provider1@example.com', '0987654321', '2024-03-12', 'Plumbing', 'providerpass')\n");
 
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
-
-
+        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 'CSl2QwrPpeMi6kmyivxz1VDCEXm2', '8nBXqXMikLRNuMBkOm9v9pU3VdL2', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
     }
 
     public Cursor getRequestData(){
@@ -178,4 +176,43 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = "+breakDownRequestId+"");
     }
+
+    public int getCountOfServiceRequested(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE User_ID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        int count = 0;
+        count = cursor.getCount();
+        cursor.close();
+        return count;
+
+    }
+
+    public int getCountOfServiceProvided(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE Provider_ID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        int count = 0;
+        count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    /*
+    public double getRating(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT Rate FROM Rating WHERE UID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        double rate = cursor.getColumnIndex("rate"); // Get the rate from the cursor
+        cursor.close();
+
+        return rate;
+    }
+     */
 }

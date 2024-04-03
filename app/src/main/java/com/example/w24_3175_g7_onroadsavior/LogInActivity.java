@@ -2,8 +2,6 @@ package com.example.w24_3175_g7_onroadsavior;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 
 import android.content.Intent;
@@ -25,10 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -52,7 +47,7 @@ public class LogInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        TextInputLayout txtInputUsername = findViewById(R.id.username);
+        TextInputLayout txtInputUserEmail = findViewById(R.id.useremail);
         TextInputLayout txtInputPassword = findViewById(R.id.password);
         Button btnSignIn = findViewById(R.id.btnSignIn);
         Button btnSignUp = findViewById(R.id.btnSignUp);
@@ -103,8 +98,18 @@ public class LogInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = txtInputUsername.getEditText().getText().toString();
+                String email = txtInputUserEmail.getEditText().getText().toString();
                 String password = txtInputPassword.getEditText().getText().toString();
+
+                if (email.isEmpty()) {
+                    txtInputUserEmail.setError("Email cannot be empty");
+                    return;
+                }
+
+                if (password.isEmpty()) {
+                    txtInputPassword.setError("Password cannot be empty");
+                    return;
+                }
 
                 signIn(email, password);
             }

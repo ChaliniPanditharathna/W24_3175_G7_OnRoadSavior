@@ -19,24 +19,7 @@ public class HistroyFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_histroy, container, false);
 
-        Button btnTempLogOut = v.findViewById(R.id.tempBtnLogOut);
-
-        btnTempLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                signOut();
-                Intent intent = new Intent(getActivity(), LogInActivity.class);
-                startActivity(intent);
-            }
-        });
-
         return v;
     }
 
-    public void signOut() {
-        // [START auth_sign_out]
-        FirebaseAuth.getInstance().signOut();
-        // [END auth_sign_out]
-    }
 }
