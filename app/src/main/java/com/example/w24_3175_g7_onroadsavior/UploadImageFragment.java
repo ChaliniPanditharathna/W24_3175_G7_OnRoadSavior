@@ -10,6 +10,8 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -38,6 +40,8 @@ public class UploadImageFragment extends Fragment {
 
     private String imageUrl;
 
+    private Button buttonNextToSubmit;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,6 +50,11 @@ public class UploadImageFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressbar);
         uploadImage = view.findViewById(R.id.imageViewImageUpload);
         buttonUploadImage = view.findViewById(R.id.btnUploadImage);
+        buttonNextToSubmit = view.findViewById(R.id.buttonNextToSubmit);
+
+        Bundle bundle = this.getArguments();
+        String breakdownType = bundle.getString("BREAKDOWNTYPE");
+        String address = bundle.getString("CURRENTLOCATION");
 
         uploadImage.setOnClickListener(v -> {chooseCameraOrPhotos();});
 
@@ -71,6 +80,22 @@ public class UploadImageFragment extends Fragment {
 
                     imageUrl = taskSnapshot.getStorage().toString();
                 });
+            }
+        });
+
+        buttonNextToSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle result = new Bundle();
+                result.putString("BREAKDOWNTYPE", breakdownType);
+                result.putString("CURRENTLOCATION",address);
+                result.putString("IMAGE_URL", imageUrl);
+
+                Fragment fragment = new BreakdownRequestFragment();
+                fragment.setArguments(result);
+
+                replaceFragment(fragment);
+
             }
         });
 
@@ -132,4 +157,12 @@ public class UploadImageFragment extends Fragment {
                 }
             }
     );
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }
