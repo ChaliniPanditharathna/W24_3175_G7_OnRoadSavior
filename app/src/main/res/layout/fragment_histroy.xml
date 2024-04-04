@@ -5,18 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".HistroyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="History Fragment"
-        android:textSize="25sp"
-        android:layout_centerInParent="true"/>
-
-    <Button
-        android:id="@+id/tempBtnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+    <!-- RecyclerView to display request details -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"/>
 
 </RelativeLayout>

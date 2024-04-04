@@ -35,4 +35,9 @@
     <string name="txtUploadImage">Upload Image</string>
     <string name="btnNextCurrentLocation">Next</string>
     <string name="txtEmergency">Emergency</string>
+    <string name="btnSubmit">Submit</string>
+    <string name="buttonSumbut">Sumbit</string>
+    <string name="textBreakdownDescription">Description</string>
+    <string name="btnNext">Next</string>
+    <string name="OK">OK</string>
 </resources>
