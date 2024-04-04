@@ -100,6 +100,15 @@ public class FragmentHandler extends AppCompatActivity {
             }
         });
 
+        navigationView.getMenu().findItem(R.id.nav_home).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                replaceFragment(new HomeFragment(), currentUser);
+                fab.setVisibility(View.VISIBLE);
+                return  true;
+            }
+        });
+
         replaceFragment(new ServiceProviderRequestFragment(), currentUser);
 
         FloatingActionButton fab = findViewById(R.id.fab_emergency);

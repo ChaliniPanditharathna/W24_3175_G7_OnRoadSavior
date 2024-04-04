@@ -7,9 +7,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.w24_3175_g7_onroadsavior.UserHelperClass;
 
+import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
 
-        db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date LOCALDATE NOT NULL,Updated_Date LOCALDATE, User_ID INTEGER NOT NULL, Provider_ID INTEGER NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image BLOB, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
+        db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
     }
 
     @Override
@@ -149,15 +152,19 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addRequest() {
+    public void addRequest(String createdDate, String updatedDate, String userID, String providerID, String breakdownType, String address, String description, String image, String status) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        Log.d("breakdownType",breakdownType);
+        Log.d("Location",address);
 
-        //db.execSQL("INSERT INTO User (uID, Name, Username, Email, Phone_NO, Password, Created_Date) VALUES ('John User', 'user1', 'john@example.com', '2024-03-12', '1234567890', 'password123')\n");
+        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ( '"+createdDate+"',  '"+createdDate+"',  '"+userID+"',  '"+providerID+"',  '"+breakdownType+"',  '"+address+"',  '"+description+"',  '"+image+"',  '"+status+"')\n");
+    }
 
-        //db.execSQL("INSERT INTO ServiceProvider (uID, Name, Username, Email, Phone_NO, Password, Location, BreakDownType, Created_Date) VALUES ('Service Provider 1', 'provider1', 'provider1@example.com', '0987654321', '2024-03-12', 'Plumbing', 'providerpass')\n");
-
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, 'CSl2QwrPpeMi6kmyivxz1VDCEXm2', '8nBXqXMikLRNuMBkOm9v9pU3VdL2', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
+    public Cursor getBreakdownRequestData(){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select *  from BreakDownRequest", null);
+        return  cursor;
     }
 
     public Cursor getRequestData(){

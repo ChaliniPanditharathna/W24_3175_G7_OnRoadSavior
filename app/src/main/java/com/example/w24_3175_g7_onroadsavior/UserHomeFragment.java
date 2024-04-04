@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
 import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownType;
 import com.example.w24_3175_g7_onroadsavior.Model.BreakdownTypes;
 
@@ -40,7 +42,13 @@ public class UserHomeFragment extends Fragment {
 
         AdapterBreakdownType adapterBreakdownType = new AdapterBreakdownType(breakdownTypesList, position -> {
             Toast.makeText(getContext(), breakdownTypesList.get(position).getBreakdownType(), Toast.LENGTH_SHORT).show();
-            replaceFragment(new CurrentLocationFragment());
+            Bundle result = new Bundle();
+            result.putString("BREAKDOWNTYPE",breakdownTypesList.get(position).getBreakdownType());
+
+            Fragment fragment = new CurrentLocationFragment();
+            fragment.setArguments(result);
+
+            replaceFragment(fragment);
         });
         recyclerView.setAdapter(adapterBreakdownType);
         // return inflater.inflate(R.layout.fragment_test, container, false);
@@ -60,6 +68,7 @@ public class UserHomeFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }
