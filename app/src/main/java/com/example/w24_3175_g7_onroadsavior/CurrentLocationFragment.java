@@ -36,7 +36,6 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
     TextView textViewLocation;
     LocationManager locationManager;
     Button btnNext;
-    String address;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,9 +47,6 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         textViewLocation = view.findViewById(R.id.textViewCurrentLocationId);
         buttonLocation = view.findViewById(R.id.buttonCurrentLocation);
         btnNext = view.findViewById(R.id.buttonNextCurrentLocation);
-
-        Bundle bundle = this.getArguments();
-        String breakdownType = bundle.getString("BREAKDOWNTYPE");
 
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
@@ -71,15 +67,7 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Bundle result = new Bundle();
-                result.putString("BREAKDOWNTYPE", breakdownType);
-                result.putString("CURRENTLOCATION",address);
-
-                Fragment fragment = new UploadImageFragment();
-                fragment.setArguments(result);
-
-                replaceFragment(fragment);
+                replaceFragment(new UploadImageFragment());
             }
         });
         return view;
@@ -93,6 +81,8 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         } catch (Exception ex){
             ex.printStackTrace();
         }
+
+
     }
 
     @Override
@@ -101,7 +91,7 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         try{
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(),1);
-            address = addresses.get(0).getAddressLine(0);
+            String address = addresses.get(0).getAddressLine(0);
 
             textViewLocation.setText(address);
 
@@ -129,7 +119,6 @@ public class CurrentLocationFragment extends Fragment implements LocationListene
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }
