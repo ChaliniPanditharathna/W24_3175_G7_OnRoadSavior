@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,21 +99,7 @@ public class BreakdownRequestFragment extends Fragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
-                Log.d("Address", address);
-                Bundle result = new Bundle();
-                result.putString("CREATEDdATE", currentDateAndTime);
-                result.putString("UPDATEDDATE",currentDateAndTime);
-                result.putString("USERID", userId);
-                result.putString("PROVIDERID",providerId);
-                result.putString("BREAKDOWNTYPE", breakdownType);
-                result.putString("CURRENTLOCATION",address);
-                result.putString("DESCRIPTION", description);
-                result.putString("IMAGE", "image");
-                result.putString("STATUS",status);
-
-                Fragment fragment = new BreakdownRequestFragment();
-                fragment.setArguments(result);
-
+                Fragment fragment = new HistroyFragment();
                 replaceFragment(fragment);
             }
         });
