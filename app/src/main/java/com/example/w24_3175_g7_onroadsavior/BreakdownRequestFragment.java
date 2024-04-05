@@ -70,7 +70,7 @@ public class BreakdownRequestFragment extends Fragment {
                 } else {
                     Log.e("Error", "Can't get user Id");
                 }
-                providerId = "BBB";
+                providerId = "5utKiBSA4Ec60prqeE1kGs56uq63";
 
                 description = editTextDescription.getText().toString();
 

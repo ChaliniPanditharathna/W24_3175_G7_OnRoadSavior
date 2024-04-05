@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,19 @@ import java.util.List;
 public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<AdapterBreakdownRequestDetails.ViewHolder> {
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
 
+    public interface OnRatingProvidedListener {
+        void onRatingProvided(int position, float rating);
+    }
+
+    private OnRatingProvidedListener ratingListener;
+
     public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
+    }
+
+    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, OnRatingProvidedListener ratingListener) {
+        this.breakdownRequestDetailsList = breakdownRequestDetailsList;
+        this.ratingListener = ratingListener;
     }
 
     public List<BreakdownRequestDetails> getBreakdownRequestDetailsList() {
@@ -53,9 +65,22 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         holder.textViewBreakdownType.setText(requestDetails.getBreakdownType());
         holder.textViewCurrentLocation.setText(requestDetails.getCurrentLocation());
         holder.textViewDescription.setText(requestDetails.getDescription());
-        // Load image using Glide or any other image loading library
         Glide.with(holder.itemView).load(requestDetails.getImageUrl()).into(holder.imageViewImage);
         holder.textViewStatus.setText(requestDetails.getStatus());
+        /*holder.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (fromUser) {
+                if (ratingListener != null) {
+                    ratingListener.onRatingProvided(position, rating);
+                }
+            }
+        });*/
+        /*float providerRating = requestDetails.getProviderRating();
+        if (providerRating >= 0) {
+            holder.ratingBar.setRating(providerRating);
+        } else {
+            holder.ratingBar.setRating(0);
+            holder.ratingBar.setEnabled(false);
+        }*/
     }
 
     @Override
@@ -63,10 +88,7 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         return breakdownRequestDetailsList.size();
     }
 
-    // Implement onCreateViewHolder, onBindViewHolder, and getItemCount methods
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // Declare your ViewHolder views here
 
         TextView textViewCreatedDate;
         TextView textViewUpdatedDate;
@@ -75,11 +97,12 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         TextView textViewBreakdownType;
         TextView textViewCurrentLocation;
         TextView textViewDescription;
-        ImageView imageViewImage; // Add ImageView if displaying images
+        ImageView imageViewImage;
         TextView textViewStatus;
+
+       // RatingBar ratingBar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize your views here
             textViewCreatedDate = itemView.findViewById(R.id.textViewCreatedDate);
             textViewUpdatedDate = itemView.findViewById(R.id.textViewUpdatedDate);
             textViewUserId = itemView.findViewById(R.id.textViewUserId);
@@ -89,6 +112,7 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
             imageViewImage = itemView.findViewById(R.id.imageViewImage); // Initialize ImageView if displaying images
             textViewStatus = itemView.findViewById(R.id.textViewStatus);
+         //   ratingBar = itemView.findViewById(R.id.ratingBar);
         }
     }
 

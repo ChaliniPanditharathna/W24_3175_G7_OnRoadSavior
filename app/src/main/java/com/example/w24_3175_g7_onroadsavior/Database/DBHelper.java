@@ -30,9 +30,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE User ( ID TEXT PRIMARY KEY,Name VARCHAR(255) NOT NULL,Username VARCHAR(100) NOT NULL,Email VARCHAR(255) NOT NULL, Phone_NO VARCHAR(20), User_Type VARCHAR(255) NOT NULL, Created_Date LOCALDATE NOT NULL)");
 
-        db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
+        //db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
+
+        db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255), Rating REAL DEFAULT 0\n)");
+
 
         db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
+
+        //db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT, Created_Date TEXT NOT NULL, Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT, Location TEXT, Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL, Rating REAL, FOREIGN KEY (User_ID) REFERENCES User(ID), FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
+
     }
 
     @Override
@@ -165,6 +171,28 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select *  from BreakDownRequest", null);
         return  cursor;
+    }
+
+    public void updateProviderRating(String providerId, float rating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Rating", rating);
+        db.update("ServiceProvider", values, "ID=?", new String[]{providerId});
+        db.close();
+    }
+
+    public float getProviderRating(String providerId) {
+        float rating = -1;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Rating FROM ServiceProvider WHERE ID = ?", new String[]{providerId});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            rating = cursor.getFloat(0);
+            cursor.close();
+        }
+
+        return rating;
     }
 
     public Cursor getRequestData(){
