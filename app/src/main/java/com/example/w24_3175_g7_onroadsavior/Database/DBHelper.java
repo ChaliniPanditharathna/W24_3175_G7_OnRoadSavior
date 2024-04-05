@@ -161,7 +161,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("Location",address);
 
         db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ( '"+createdDate+"',  '"+createdDate+"',  '"+userID+"',  '"+providerID+"',  '"+breakdownType+"',  '"+address+"',  '"+description+"',  '"+image+"',  '"+status+"')\n");
-        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+providerID+"', 'Your have new request',  'Pending')\n");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+providerID+"', 'You have a new request',  'Pending')\n");
 
     }
 
@@ -239,7 +239,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Cursor getNotificationDetails(String uid){
         SQLiteDatabase DB = this.getWritableDatabase();
-        Cursor cursor = DB.rawQuery("Select ID, Message from Notification WHERE RECIVER_ID = '"+uid + "'", null);
+        Cursor cursor = DB.rawQuery("Select ID, Message, Updated_Date from Notification WHERE RECIVER_ID = '"+uid + "' ORDER BY Updated_Date DESC", null);
 
         return  cursor;
     }
