@@ -244,9 +244,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return  cursor;
     }
 
-    public void updateNotificationStatus(int notificationId) {
+    public void updateNotificationStatus(int notificationId, String currentDateAndTime) {
         SQLiteDatabase DB = this.getWritableDatabase();
-        DB.execSQL("UPDATE Notification SET Status = 'Viewed' WHERE ID = "+notificationId);
+        DB.execSQL("UPDATE Notification SET Status = 'Viewed', Updated_Date = '"+currentDateAndTime+"' WHERE ID = "+notificationId);
     }
 
     /*

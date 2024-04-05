@@ -45,6 +45,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class FragmentHandler extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
@@ -258,6 +261,8 @@ public class FragmentHandler extends AppCompatActivity {
         }
     }
     private void makeNotification() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
         Cursor cursor  = DB.getNotificationDetails(currentUser.getUid());
         if(cursor.getCount() !=0){
             int notificationId = 0;
@@ -307,7 +312,7 @@ public class FragmentHandler extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("notificationShown_" + notificationId, true);
             editor.apply();
-            DB.updateNotificationStatus(notificationId);
+            DB.updateNotificationStatus(notificationId, currentDateAndTime);
 
         }
     }
