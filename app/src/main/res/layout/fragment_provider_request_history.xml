@@ -13,39 +13,62 @@
 
         <!-- User Name -->
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageViewUserIcon"
-            android:layout_width="105dp"
-            android:layout_height="84dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/baseline_account_circle_24"
-            app:civ_border_width="2dp" />
+        <LinearLayout
+            android:id="@+id/infoLayoutThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/textViewMessage"
+                android:layout_width="244dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="94dp"
+                android:text="TextView"
+                android:textColor="#19354E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
         <!-- Breakdown Image -->
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewUserIcon"
+            android:layout_width="98dp"
+            android:layout_height="85dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="288dp"
+            android:src="@drawable/baseline_account_circle_24"
+            app:civ_border_width="2dp" />
 
         <TextView
             android:id="@+id/textViewUserName"
             android:layout_width="wrap_content"
-            android:layout_height="47dp"
-            android:layout_below="@id/imageViewUserIcon"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infoLayoutThree"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="-69dp"
-            android:layout_marginEnd="43dp"
-            android:layout_toEndOf="@+id/imageViewUserIcon"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="100dp"
             android:text="@string/hello_blank_fragment"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/infoLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewUserName"
-            android:layout_marginTop="45dp"
+            android:layout_below="@id/textViewUserName"
+            android:layout_marginTop="50dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -111,10 +134,11 @@
             android:id="@+id/infoLayoutFour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/infoLayoutTwo"
+            android:layout_below="@id/infoLayoutTwo"
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
+
 
 
             <ImageView
@@ -122,6 +146,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/baseline_location_on_24" />
+
+
             <TextView
                 android:id="@+id/textViewLocation"
                 android:layout_width="wrap_content"
@@ -132,47 +158,26 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+        <ImageView
+            android:id="@+id/imageViewBreakDown"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/textViewDescription"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="84dp"
+            android:src="@drawable/vehiclebreakdown" />
 
         <TextView
             android:id="@+id/textViewDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/infoLayoutFour"
-            android:layout_marginTop="24dp"
+            android:layout_below="@id/infoLayoutFour"
+            android:layout_marginTop="23dp"
             android:text="TextView" />
 
-        <ImageView
-            android:id="@+id/imageViewBreakDown"
-            android:layout_width="240dp"
-            android:layout_height="120dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textViewDescription"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/vehiclebreakdown" />
-
-        <Button
-            android:id="@+id/buttonAcceptRequest"
-            android:layout_width="200dp"
-            android:layout_height="55dp"
-            android:layout_below="@+id/imageViewBreakDown"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@color/material_dynamic_primary30"
-            android:backgroundTint="#1E407A"
-            android:text="@string/AcceptRequest"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/buttonRejectRequest"
-            android:layout_width="200dp"
-            android:layout_height="55dp"
-            android:layout_below="@+id/buttonAcceptRequest"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
-            android:background="@color/material_dynamic_primary30"
-            android:backgroundTint="#1E407A"
-            android:text="@string/BtnRejectRequest"
-            android:textColor="@color/white" />
 
     </RelativeLayout>
 </ScrollView>

@@ -60,13 +60,13 @@ public class FragmentHandler extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         DB = new DBHelper(this);
-
         currentUser = mAuth.getCurrentUser();
+
         if(currentUser == null){
             redirectToLogin();
             return;
         }
-
+        UserHelperClass user = DB.getUserData(currentUser.getUid());
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -85,7 +85,14 @@ public class FragmentHandler extends AppCompatActivity {
         navigationView.bringToFront();
 
         if (savedInstanceState == null) {
-           getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new ServiceProviderRequestFragment()).commit();
+            if(user.getUserType().equalsIgnoreCase("Service Provider")) {
+                replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+
+            }
+            if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                replaceFragment(new UserHomeFragment(), currentUser);
+
+            }
            navigationView.setCheckedItem(R.id.nav_home);
         }
 
@@ -103,13 +110,16 @@ public class FragmentHandler extends AppCompatActivity {
         navigationView.getMenu().findItem(R.id.nav_home).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                replaceFragment(new HomeFragment(), currentUser);
+                if(user.getUserType().equalsIgnoreCase("Service Provider")) {
+                    replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+                }
+                if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                    replaceFragment(new UserHomeFragment(), currentUser);
+                }
                 fab.setVisibility(View.VISIBLE);
                 return  true;
             }
         });
-
-        replaceFragment(new ServiceProviderRequestFragment(), currentUser);
 
         FloatingActionButton fab = findViewById(R.id.fab_emergency);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,12 +133,21 @@ public class FragmentHandler extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.home){
-                replaceFragment(new ServiceProviderRequestFragment(), currentUser);
-                fab.setVisibility(View.VISIBLE);
+                if(user.getUserType().equalsIgnoreCase("Service Provider")) {
+                    replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+                }
+                if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                    replaceFragment(new UserHomeFragment(), currentUser);
+                }
                 return  true;
             }
             if(item.getItemId() == R.id.history){
-                replaceFragment(new HistroyFragment(), currentUser);
+                if(user.getUserType().equalsIgnoreCase("Service Provider")){
+                    replaceFragment(new ProviderRequestsHistoryFragment(), currentUser);
+                }
+                if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                    replaceFragment(new HistroyFragment(), currentUser);
+                }
                 fab.setVisibility(View.GONE);
                 return  true;
             }

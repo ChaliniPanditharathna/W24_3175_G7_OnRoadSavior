@@ -1,6 +1,9 @@
 package com.example.w24_3175_g7_onroadsavior;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +11,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserRequestFragment#newInstance} factory method to
+ * Use the {@link ProviderRequestHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserRequestFragment extends Fragment {
+public class ProviderRequestHistoryFragment extends Fragment {
+
     StorageReference storageReference;
     FirebaseStorage storage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_user_request, container, false);
-
+        View v = inflater.inflate(R.layout.fragment_provider_request_history, container, false);
         Bundle bundle = this.getArguments();
         String username = bundle.getString("USERNAME");
         String userId = bundle.getString("USERID");
@@ -36,9 +38,9 @@ public class UserRequestFragment extends Fragment {
         String location = bundle.getString("LOCATION");
         String description = bundle.getString("DESCRIPTION");
         String breakDownType = bundle.getString("BREAKDOWNTYPE");
-        String message= bundle.getString("MESSAGE");
-        String imageUrl= bundle.getString("IMAGEURL");
+        String message = bundle.getString("MESSAGE");
         String action = bundle.getString("ACTION");
+        String imageUrl = bundle.getString("IMAGEURL");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -49,12 +51,10 @@ public class UserRequestFragment extends Fragment {
         TextView txtCreatedDate = v.findViewById(R.id.textViewCreatedDate);
         TextView txtPhoneNo = v.findViewById(R.id.textViewPhoneNo);
         TextView txtMessage = v.findViewById(R.id.textViewMessage);
-        ImageView imageViewDesition = v.findViewById(R.id.imageViewDesion);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
         ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
 
-
-        StorageReference profileImageRef = storageReference.child("profile_images/" +userId+ ".jpg");
+        StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
         // Check if the ImageView is not null before loading the image
         if (userPic != null) {
             profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -70,6 +70,7 @@ public class UserRequestFragment extends Fragment {
 
         String[] parts = imageUrl.split("/");
         String imageId = parts[parts.length - 1];
+        Log.d("TESTDEMO", imageId);
         if (userBreakdownPic != null) {
             StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
             breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -77,17 +78,10 @@ public class UserRequestFragment extends Fragment {
                 Picasso.get().load(uri).into(userBreakdownPic);
             }).addOnFailureListener(exception -> {
                 // Handle failure to load breakdown image
-                Log.e("UserRequestFragment", "Failed to load breakdown image: " + exception.getMessage());
+                Log.e("UserRequestAcceptFragment", "Failed to load breakdown image: " + exception.getMessage());
             });
         } else {
-            Log.e("UserRequestFragment", "Breakdown ImageView is null");
-        }
-
-        if(action.equals("Accept")){
-            imageViewDesition.setImageResource(R.drawable.accepticon);
-        }
-        if(action.equals("Reject")){
-            imageViewDesition.setImageResource(R.drawable.rejecticon);
+            Log.e("UserRequestAcceptFragment", "Breakdown ImageView is null");
         }
         txtUsername.setText(username);
         txtBreakDownType.setText(breakDownType);

@@ -167,21 +167,39 @@ public class DBHelper extends SQLiteOpenHelper {
         return  cursor;
     }
 
-    public Cursor getRequestData(){
+    public Cursor getRequestData(String uid) {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Pending'", null);
-        return  cursor;
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE (Status ='Pending' OR Status ='Accept') and Provider_Id = '" + uid + "'", null);
+        return cursor;
+    }
+
+    public Cursor getRequestHistoryData(String uid) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject' and Provider_Id = '" + uid + "'", null);
+        return cursor;
     }
 
     public void acceptRequest(int breakDownRequestId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE BreakDownRequest SET Status = 'Accept' WHERE ID = "+breakDownRequestId+"");
+        db.execSQL("UPDATE BreakDownRequest SET Status = 'Accept' WHERE ID = " + breakDownRequestId + "");
     }
 
     public void rejectRequest(int breakDownRequestId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = "+breakDownRequestId+"");
+        db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = " + breakDownRequestId + "");
+    }
+
+    public boolean updateStatus(String breakDownRequestId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.execSQL("UPDATE BreakDownRequest SET Status = 'Done' WHERE ID = " + breakDownRequestId + "");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public int getCountOfServiceRequested(String uId) {
