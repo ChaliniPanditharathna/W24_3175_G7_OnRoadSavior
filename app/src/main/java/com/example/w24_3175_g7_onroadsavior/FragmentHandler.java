@@ -75,7 +75,12 @@ public class FragmentHandler extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.home){
-                replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+                if(user.getUserType().equalsIgnoreCase("Service Provider")) {
+                    replaceFragment(new ServiceProviderRequestFragment(), currentUser);
+                }
+                if(user.getUserType().equalsIgnoreCase("Service Requester")){
+                    replaceFragment(new UserHomeFragment(), currentUser);
+                }
                 fab.setVisibility(View.VISIBLE);
                 return  true;
             }

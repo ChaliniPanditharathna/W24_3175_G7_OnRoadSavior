@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewCreatedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Created Date:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewUpdatedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Updated Date:" />
+
+    <TextView
+        android:id="@+id/textViewUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewProviderId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Provider ID:" />
+
+    <TextView
+        android:id="@+id/textViewBreakdownType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Breakdown Type:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Location:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description:"
+        android:textStyle="bold" />
+
+    <!-- Add ImageView here if displaying images -->
+    <ImageView
+        android:id="@+id/imageViewImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status:"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -3,7 +3,6 @@ package com.example.w24_3175_g7_onroadsavior;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -28,19 +27,20 @@ import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserRequestAcceptFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class UserRequestAcceptFragment extends Fragment {
 
     StorageReference storageReference;
     FirebaseStorage storage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_user_request_accept, container, false);
+        View v = inflater.inflate(R.layout.fragment_user_request_accept, container, false);
         DBHelper dbHelper = new DBHelper(v.getContext());
         TextView txtUsername = v.findViewById(R.id.textViewUserName);
         TextView txtLocation = v.findViewById(R.id.textViewLocation);
@@ -51,6 +51,7 @@ public class UserRequestAcceptFragment extends Fragment {
         Button btnAccept = v.findViewById(R.id.buttonAcceptRequest);
         Button btnReject = v.findViewById(R.id.buttonRejectRequest);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
+        ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
         Bundle bundle = this.getArguments();
         String username = bundle.getString("USERNAME");
         String userId = bundle.getString("USERID");
@@ -59,7 +60,8 @@ public class UserRequestAcceptFragment extends Fragment {
         String location = bundle.getString("LOCATION");
         String description = bundle.getString("DESCRIPTION");
         String breakDownType = bundle.getString("BREAKDOWNTYPE");
-        String breakDownRequestId= bundle.getString("BREAKDOWNREQUESTID");
+        String breakDownRequestId = bundle.getString("BREAKDOWNREQUESTID");
+        String imageUrl = bundle.getString("IMAGEURL");
         txtUsername.setText(username);
         txtBreakDownType.setText(breakDownType);
         txtLocation.setText(location);
@@ -70,7 +72,7 @@ public class UserRequestAcceptFragment extends Fragment {
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        StorageReference profileImageRef = storageReference.child("profile_images/" +userId+ ".jpg");
+        StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
 
         // Check if the ImageView is not null before loading the image
         if (userPic != null) {
@@ -84,34 +86,49 @@ public class UserRequestAcceptFragment extends Fragment {
         } else {
             Log.e("UserRequestAcceptFragment", "ImageView is null");
         }
+        String[] parts = imageUrl.split("/");
+        String imageId = parts[parts.length - 1];
+        Log.d("TESTDEMO", imageId);
+        if (userBreakdownPic != null) {
+            StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
+            breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                // Load the breakdown image using Picasso
+                Picasso.get().load(uri).into(userBreakdownPic);
+            }).addOnFailureListener(exception -> {
+                // Handle failure to load breakdown image
+                Log.e("UserRequestAcceptFragment", "Failed to load breakdown image: " + exception.getMessage());
+            });
+        } else {
+            Log.e("UserRequestAcceptFragment", "Breakdown ImageView is null");
+        }
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId));
+                dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId));
                 String message = "Hi, Accept your request by service provider. Thank you.";
                 btnReject.setEnabled(false);
                 Activity activity = requireActivity();
-                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                     sendSMS(String.valueOf(txtPhoneNo), v, message);
                 } else {
-                    if(v.getContext() !=null){
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 100);
-                    }
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 100);
                 }
 
-                Bundle result = new Bundle();;
-                result.putString("USERNAME",username );
-                result.putString("USERID",userId );
-                result.putString("BREAKDOWNTYPE",breakDownType);
-                result.putString("PHONENO",phoneNo);
-                result.putString("CREATEDDATE",createdDate );
-                result.putString("LOCATION",location);
-                result.putString("DESCRIPTION",description );
-                result.putString("MESSAGE","Accepted" );
-                result.putString("ACTION","Accept" );
+                Bundle result = new Bundle();
+                ;
+                result.putString("USERNAME", username);
+                result.putString("USERID", userId);
+                result.putString("BREAKDOWNTYPE", breakDownType);
+                result.putString("PHONENO", phoneNo);
+                result.putString("CREATEDDATE", createdDate);
+                result.putString("LOCATION", location);
+                result.putString("DESCRIPTION", description);
+                result.putString("MESSAGE", "Accepted");
+                result.putString("ACTION", "Accept");
+                result.putString("IMAGEURL", imageUrl);
                 Fragment userRequestFragment = new UserRequestFragment();
                 userRequestFragment.setArguments(result);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_layout, userRequestFragment);
                 transaction.addToBackStack(null);
@@ -126,26 +143,27 @@ public class UserRequestAcceptFragment extends Fragment {
                 dbHelper.rejectRequest(Integer.parseInt(breakDownRequestId));
                 btnAccept.setEnabled(false);
                 String message = "Hi, Reject your request by provider. Thank you.";
-                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                     sendSMS(String.valueOf(txtPhoneNo), v, message);
                 } else {
                     ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
                 }
                 btnAccept.setVisibility(View.INVISIBLE);
-                Bundle result = new Bundle();;
-                result.putString("USERNAME",username );
-                result.putString("USERID",userId );
-                result.putString("BREAKDOWNTYPE",breakDownType);
-                result.putString("PHONENO",phoneNo);
-                result.putString("CREATEDDATE",createdDate );
-                result.putString("LOCATION",location);
-                result.putString("DESCRIPTION",description );
-                result.putString("MESSAGE","Rejected" );
-                result.putString("ACTION","Reject" );
+                Bundle result = new Bundle();
+                ;
+                result.putString("USERNAME", username);
+                result.putString("USERID", userId);
+                result.putString("BREAKDOWNTYPE", breakDownType);
+                result.putString("PHONENO", phoneNo);
+                result.putString("CREATEDDATE", createdDate);
+                result.putString("LOCATION", location);
+                result.putString("DESCRIPTION", description);
+                result.putString("MESSAGE", "Rejected");
+                result.putString("ACTION", "Reject");
 
                 Fragment userRequestFragment = new UserRequestFragment();
                 userRequestFragment.setArguments(result);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_layout, userRequestFragment);
                 transaction.addToBackStack(null);
@@ -154,9 +172,10 @@ public class UserRequestAcceptFragment extends Fragment {
         });
 
 
-        return  v;
+        return v;
     }
-    private void sendSMS(String txtPhoneNo, View v, String message){
+
+    private void sendSMS(String txtPhoneNo, View v, String message) {
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage("6725580280", null, message, null, null);
         Toast.makeText(v.getContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();

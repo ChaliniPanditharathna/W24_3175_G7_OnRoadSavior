@@ -15,8 +15,11 @@ public class RequestDetails {
     private String status;
     private String phoneNo;
 
+    private String imageUrl;
+
     public RequestDetails(){}
-    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, String userId, String providerId, String userName, String phoneNo, String breakDownRequestId, String status) {
+
+    public RequestDetails(String breakDownType, String location, String description, String createdDate, String updateDate, String image, String userId, String providerId, String userName, String phoneNo, String breakDownRequestId, String status, String imageUrl) {
         this.breakDownType = breakDownType;
         this.location = location;
         this.description = description;
@@ -29,6 +32,7 @@ public class RequestDetails {
         this.phoneNo = phoneNo;
         this.breakDownRequestId = breakDownRequestId;
         this.status=status;
+        this.imageUrl = imageUrl;
     }
 
     public String getBreakDownRequestId() {
@@ -125,5 +129,13 @@ public class RequestDetails {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

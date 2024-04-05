@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserRequestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class UserRequestFragment extends Fragment {
@@ -38,6 +37,7 @@ public class UserRequestFragment extends Fragment {
         String breakDownType = bundle.getString("BREAKDOWNTYPE");
         String message= bundle.getString("MESSAGE");
         String action = bundle.getString("ACTION");
+        String imageUrl= bundle.getString("IMAGEURL");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -50,6 +50,7 @@ public class UserRequestFragment extends Fragment {
         TextView txtMessage = v.findViewById(R.id.textViewMessage);
         ImageView imageViewDesition = v.findViewById(R.id.imageViewDesion);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
+        ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
 
         StorageReference profileImageRef = storageReference.child("profile_images/" +userId+ ".jpg");
         // Check if the ImageView is not null before loading the image
@@ -63,6 +64,21 @@ public class UserRequestFragment extends Fragment {
             });
         } else {
             Log.e("UserRequestAcceptFragment", "ImageView is null");
+        }
+
+        String[] parts = imageUrl.split("/");
+        String imageId = parts[parts.length - 1];
+        if (userBreakdownPic != null) {
+            StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
+            breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                // Load the breakdown image using Picasso
+                Picasso.get().load(uri).into(userBreakdownPic);
+            }).addOnFailureListener(exception -> {
+                // Handle failure to load breakdown image
+                Log.e("UserRequestFragment", "Failed to load breakdown image: " + exception.getMessage());
+            });
+        } else {
+            Log.e("UserRequestFragment", "Breakdown ImageView is null");
         }
         if(action.equals("Accept")){
             imageViewDesition.setImageResource(R.drawable.accepticon);

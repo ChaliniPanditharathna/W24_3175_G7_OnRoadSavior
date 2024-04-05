@@ -7,10 +7,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.w24_3175_g7_onroadsavior.UserHelperClass;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
 
-        db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date LOCALDATE NOT NULL,Updated_Date LOCALDATE, User_ID INTEGER NOT NULL, Provider_ID INTEGER NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image BLOB, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
+        db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //CRUD - Table: User
-    public boolean addUser(String uId, String fullName, String username, String email, String contactNumber, String userType){
+    public boolean addUser(String uId, String fullName, String username, String email, String contactNumber, String userType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -64,14 +64,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public UserHelperClass getUserData(String uId){
+    public UserHelperClass getUserData(String uId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM User WHERE ID='"+uId+"'";
-        Cursor cursor = db.rawQuery(query,null);
+        String query = "SELECT * FROM User WHERE ID='" + uId + "'";
+        Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
 
             String fullName = cursor.getString(1);
             String username = cursor.getString(2);
@@ -100,7 +100,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //CRUD - Table: ServiceProvider
-    public boolean addServiceProvider(String uId, String location, String serviceType){
+    public boolean addServiceProvider(String uId, String location, String serviceType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -108,25 +108,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
         contentValues.put("ID", uId);
         contentValues.put("Location", location);
-        contentValues.put("BreakDownType",serviceType);
+        contentValues.put("BreakDownType", serviceType);
 
         long result = db.insert("ServiceProvider", null, contentValues);
 
-        if(result == -1) {
+        if (result == -1) {
             return false;
         } else {
             return true;
         }
     }
 
-    public UserHelperClass getServiceProviderData(String uId){
+    public UserHelperClass getServiceProviderData(String uId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM ServiceProvider WHERE ID='"+uId+"'";
-        Cursor cursor = db.rawQuery(query,null);
+        String query = "SELECT * FROM ServiceProvider WHERE ID='" + uId + "'";
+        Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
 
 
             String location = cursor.getString(1);
@@ -149,41 +149,50 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addRequest() {
+    public void addRequest(String createdDate, String updatedDate, String userID, String providerID, String breakdownType, String address, String description, String image, String status) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-
-        //db.execSQL("INSERT INTO User (uID, Name, Username, Email, Phone_NO, Password, Created_Date) VALUES ('John User', 'user1', 'john@example.com', '2024-03-12', '1234567890', 'password123')\n");
-
-        //db.execSQL("INSERT INTO ServiceProvider (uID, Name, Username, Email, Phone_NO, Password, Location, BreakDownType, Created_Date) VALUES ('Service Provider 1', 'provider1', 'provider1@example.com', '0987654321', '2024-03-12', 'Plumbing', 'providerpass')\n");
-
         db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Plumbing', '14820 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Wheel', '16833 162A Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Done')\n");
-        db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ('2024-03-12', NULL, '8nBXqXMikLRNuMBkOm9v9pU3VdL2', '5utKiBSA4Ec60prqeE1kGs56uq63', 'Tire', '3422 90B Avenue, Surrey, BC', 'The plumbing vehicle is experiencing a significant issue that hampers its functionality and ability to fulfill service requests effectively.', NULL, 'Pending')\n");
-
-
     }
 
-    public Cursor getRequestData(){
+    public Cursor getBreakdownRequestData() {
         SQLiteDatabase DB = this.getWritableDatabase();
-        Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID, b.Status  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Pending' OR Status ='Accept' ", null);
-        return  cursor;
+        Cursor cursor = DB.rawQuery("Select *  from BreakDownRequest", null);
+        return cursor;
     }
-    public Cursor getRequestHistoryData(){
+
+    public Cursor getRequestData(String uid) {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID, b.Status  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject'", null);
-        return  cursor;
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE (Status ='Pending' OR Status ='Accept') and Provider_Id = '" + uid + "'", null);
+        return cursor;
+    }
+
+    public Cursor getRequestHistoryData() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject'", null);
+        return cursor;
     }
 
     public void acceptRequest(int breakDownRequestId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE BreakDownRequest SET Status = 'Accept' WHERE ID = "+breakDownRequestId+"");
+        db.execSQL("UPDATE BreakDownRequest SET Status = 'Accept' WHERE ID = " + breakDownRequestId + "");
     }
 
     public void rejectRequest(int breakDownRequestId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = "+breakDownRequestId+"");
+        db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = " + breakDownRequestId + "");
+    }
+
+    public boolean updateStatus(String breakDownRequestId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.execSQL("UPDATE BreakDownRequest SET Status = 'Done' WHERE ID = " + breakDownRequestId + "");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

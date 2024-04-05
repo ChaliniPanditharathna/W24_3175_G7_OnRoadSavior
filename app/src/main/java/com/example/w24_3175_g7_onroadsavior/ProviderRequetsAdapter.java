@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,9 +49,11 @@ public class ProviderRequetsAdapter extends RecyclerView.Adapter<ProviderRequets
         holder.location.setText(req.getLocation());
         if(req.getStatus().equals("Pending")){
             holder.status.setText("New");
+            holder.btnCompleted.setEnabled(false);
         }
         if(req.getStatus().equals("Accept")){
             holder.status.setText("Ongoing");
+            holder.btnCompleted.setEnabled(true);
         }
 
         storage = FirebaseStorage.getInstance();
@@ -81,6 +84,7 @@ public class ProviderRequetsAdapter extends RecyclerView.Adapter<ProviderRequets
 
         TextView  userName, breakDownType,location, status;
         ImageView imageViewProfilePic;
+        Button btnCompleted;
         public RequestViewHolder(@NonNull View itemView, ProviderRequestInterface providerRequestInterface) {
             super(itemView);
             userName=itemView.findViewById(R.id.userName);
@@ -88,6 +92,21 @@ public class ProviderRequetsAdapter extends RecyclerView.Adapter<ProviderRequets
             breakDownType=itemView.findViewById(R.id.breakdowntype);
             location=itemView.findViewById(R.id.location);
             imageViewProfilePic = itemView.findViewById(R.id.imageViewProfilePic);
+            btnCompleted = itemView.findViewById(R.id.btnComplete);
+
+            btnCompleted.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (providerRequestInterface != null) {
+                        int pos = getAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION) {
+                            // Call a method in the interface to handle the click event
+                            providerRequestInterface.onCompleteClick(pos);
+                        }
+                    }
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

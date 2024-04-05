@@ -37,6 +37,7 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
     ArrayList<RequestDetails> requestDetails;
     DBHelper dbHelper;
     ProviderRequetsAdapter requetsAdapter;
+    FirebaseUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +52,7 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         recyclerView.setAdapter(requetsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         displayData();
+
 
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -72,32 +74,39 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
     }
 
     public void displayData() {
-        Cursor cursor = dbHelper.getRequestData();
-        if (cursor.getCount() == 0) {
-            Toast.makeText(ServiceProviderRequestFragment.this.getContext(), "No entry exists", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            while (cursor.moveToNext()) {
-                RequestDetails req = new RequestDetails(
-                        cursor.getString(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6),
-                        cursor.getString(7),
-                        cursor.getString(8),
-                        cursor.getString(9),
-                        cursor.getString(10),
-                        cursor.getString(11)
+        Bundle args = getArguments();
 
-                );
+        if (args != null) {
+            currentUser = args.getParcelable("CURRENT_USER");
+            Cursor cursor = dbHelper.getRequestData(currentUser.getUid());
+            if (cursor.getCount() == 0) {
+                Toast.makeText(ServiceProviderRequestFragment.this.getContext(), "No entry exists", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                while (cursor.moveToNext()) {
+                    RequestDetails req = new RequestDetails(
+                            cursor.getString(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getString(6),
+                            cursor.getString(7),
+                            cursor.getString(8),
+                            cursor.getString(9),
+                            cursor.getString(10),
+                            cursor.getString(11),
+                            cursor.getString(12)
 
-                requestDetails.add(req);
+                    );
 
+                    requestDetails.add(req);
+
+                }
             }
         }
+
     }
 
     @Override
@@ -111,6 +120,7 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         result.putString("CREATEDDATE", req.getCreatedDate());
         result.putString("LOCATION", req.getLocation());
         result.putString("DESCRIPTION", req.getDescription());
+        result.putString("IMAGEURL", req.getImageUrl());
 
         if (req.getStatus().equals("Accept")) {
             if (req.getStatus().equals("Done")) {
@@ -139,6 +149,27 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
             transaction.addToBackStack(null);
             transaction.commit();
         }
+
+    }
+
+    public void onCompleteClick(int position) {
+        // Update the database value based on the position
+        // For example:
+        RequestDetails req = requestDetails.get(position);
+        boolean isUpdated = dbHelper.updateStatus(req.getBreakDownRequestId());
+        if (isUpdated) {
+            Toast.makeText(getContext(), "Completed successfully", Toast.LENGTH_SHORT).show();
+            requestDetails.remove(position);
+            // Fetch updated data from the database
+            // Notify the adapter about the changes
+            requetsAdapter.notifyItemRemoved(position);
+            requestDetails.clear();
+            displayData();
+        } else {
+            Toast.makeText(getContext(), "Failed to Completed", Toast.LENGTH_SHORT).show();
+        }
+
+        // Notify the adapter that the data has changed
 
     }
 

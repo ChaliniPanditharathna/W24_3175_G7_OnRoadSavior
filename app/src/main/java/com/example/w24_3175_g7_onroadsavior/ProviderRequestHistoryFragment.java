@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProviderRequestHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProviderRequestHistoryFragment extends Fragment {
@@ -39,6 +38,7 @@ public class ProviderRequestHistoryFragment extends Fragment {
         String breakDownType = bundle.getString("BREAKDOWNTYPE");
         String message = bundle.getString("MESSAGE");
         String action = bundle.getString("ACTION");
+        String imageUrl = bundle.getString("IMAGEURL");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -50,6 +50,7 @@ public class ProviderRequestHistoryFragment extends Fragment {
         TextView txtPhoneNo = v.findViewById(R.id.textViewPhoneNo);
         TextView txtMessage = v.findViewById(R.id.textViewMessage);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
+        ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
 
         StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
         // Check if the ImageView is not null before loading the image
@@ -63,6 +64,22 @@ public class ProviderRequestHistoryFragment extends Fragment {
             });
         } else {
             Log.e("UserRequestAcceptFragment", "ImageView is null");
+        }
+
+        String[] parts = imageUrl.split("/");
+        String imageId = parts[parts.length - 1];
+        Log.d("TESTDEMO", imageId);
+        if (userBreakdownPic != null) {
+            StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
+            breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                // Load the breakdown image using Picasso
+                Picasso.get().load(uri).into(userBreakdownPic);
+            }).addOnFailureListener(exception -> {
+                // Handle failure to load breakdown image
+                Log.e("UserRequestAcceptFragment", "Failed to load breakdown image: " + exception.getMessage());
+            });
+        } else {
+            Log.e("UserRequestAcceptFragment", "Breakdown ImageView is null");
         }
         txtUsername.setText(username);
         txtBreakDownType.setText(breakDownType);

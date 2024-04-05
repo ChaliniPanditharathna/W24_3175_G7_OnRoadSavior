@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProviderRequestsHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProviderRequestsHistoryFragment extends Fragment implements ProviderRequestHistoryInterface {
@@ -85,7 +84,8 @@ public class ProviderRequestsHistoryFragment extends Fragment implements Provide
                         cursor.getString(8),
                         cursor.getString(9),
                         cursor.getString(10),
-                        cursor.getString(11)
+                        cursor.getString(11),
+                        cursor.getString(12)
                 );
 
                 requestDetails.add(req);
