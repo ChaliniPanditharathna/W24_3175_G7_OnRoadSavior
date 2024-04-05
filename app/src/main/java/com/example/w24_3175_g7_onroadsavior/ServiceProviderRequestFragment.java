@@ -25,7 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -156,10 +158,11 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
     }
 
     public void onCompleteClick(int position) {
-        // Update the database value based on the position
-        // For example:
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
         RequestDetails req = requestDetails.get(position);
-        boolean isUpdated = dbHelper.updateStatus(req.getBreakDownRequestId());
+        boolean isUpdated = dbHelper.updateStatus(req.getBreakDownRequestId(), req.getUserId(), currentDateAndTime);
         if (isUpdated) {
             Toast.makeText(getContext(), "Completed successfully", Toast.LENGTH_SHORT).show();
             requestDetails.remove(position);

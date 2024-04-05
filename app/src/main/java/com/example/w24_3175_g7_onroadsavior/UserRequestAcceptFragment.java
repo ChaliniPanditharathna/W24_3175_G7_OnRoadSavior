@@ -26,6 +26,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link UserRequestAcceptFragment#newInstance} factory method to
@@ -104,10 +107,13 @@ public class UserRequestAcceptFragment extends Fragment {
         } else {
             Log.e("UserRequestAcceptFragment", "Breakdown ImageView is null");
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
         btnAccept.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-               dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId));
+               dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId), userId, currentDateAndTime);
                 btnReject.setEnabled(false);
                 String message = "Hi, Accept your request by service provider. Thank you.";
                 Activity activity = requireActivity();
@@ -143,7 +149,7 @@ public class UserRequestAcceptFragment extends Fragment {
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.rejectRequest(Integer.parseInt(breakDownRequestId));
+                dbHelper.rejectRequest(Integer.parseInt(breakDownRequestId), userId, currentDateAndTime);
                 btnAccept.setEnabled(false);
                 String message = "Hi, Reject your request by provider. Thank you.";
 
