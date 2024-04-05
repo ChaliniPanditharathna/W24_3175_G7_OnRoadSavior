@@ -41,6 +41,8 @@ public class UserRequestAcceptFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_user_request_accept, container, false);
+        ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
+
         DBHelper dbHelper = new DBHelper(v.getContext());
         TextView txtUsername = v.findViewById(R.id.textViewUserName);
         TextView txtLocation = v.findViewById(R.id.textViewLocation);
@@ -51,6 +53,7 @@ public class UserRequestAcceptFragment extends Fragment {
         Button btnAccept = v.findViewById(R.id.buttonAcceptRequest);
         Button btnReject = v.findViewById(R.id.buttonRejectRequest);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
+        ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
         Bundle bundle = this.getArguments();
         String username = bundle.getString("USERNAME");
         String userId = bundle.getString("USERID");
@@ -59,7 +62,8 @@ public class UserRequestAcceptFragment extends Fragment {
         String location = bundle.getString("LOCATION");
         String description = bundle.getString("DESCRIPTION");
         String breakDownType = bundle.getString("BREAKDOWNTYPE");
-        String breakDownRequestId= bundle.getString("BREAKDOWNREQUESTID");
+        String breakDownRequestId = bundle.getString("BREAKDOWNREQUESTID");
+        String imageUrl = bundle.getString("IMAGEURL");
         txtUsername.setText(username);
         txtBreakDownType.setText(breakDownType);
         txtLocation.setText(location);
@@ -84,21 +88,31 @@ public class UserRequestAcceptFragment extends Fragment {
         } else {
             Log.e("UserRequestAcceptFragment", "ImageView is null");
         }
+
+        String[] parts = imageUrl.split("/");
+        String imageId = parts[parts.length - 1];
+        Log.d("TESTDEMO", imageId);
+        if (userBreakdownPic != null) {
+            StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
+            breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                // Load the breakdown image using Picasso
+                Picasso.get().load(uri).into(userBreakdownPic);
+            }).addOnFailureListener(exception -> {
+                // Handle failure to load breakdown image
+                Log.e("UserRequestAcceptFragment", "Failed to load breakdown image: " + exception.getMessage());
+            });
+        } else {
+            Log.e("UserRequestAcceptFragment", "Breakdown ImageView is null");
+        }
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                dbHelper.acceptRequest(Integer.parseInt(breakDownRequestId));
-                String message = "Hi, Accept your request by service provider. Thank you.";
                 btnReject.setEnabled(false);
+                String message = "Hi, Accept your request by service provider. Thank you.";
                 Activity activity = requireActivity();
-                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-                    sendSMS(String.valueOf(txtPhoneNo), v, message);
-                } else {
-                    if(v.getContext() !=null){
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 100);
-                    }
-                }
 
+                btnReject.setVisibility(View.INVISIBLE);
                 Bundle result = new Bundle();;
                 result.putString("USERNAME",username );
                 result.putString("USERID",userId );
@@ -109,6 +123,12 @@ public class UserRequestAcceptFragment extends Fragment {
                 result.putString("DESCRIPTION",description );
                 result.putString("MESSAGE","Accepted" );
                 result.putString("ACTION","Accept" );
+                result.putString("IMAGEURL", imageUrl);
+                if(ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                    sendSMS(String.valueOf(phoneNo), v, message);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
+                }
                 Fragment userRequestFragment = new UserRequestFragment();
                 userRequestFragment.setArguments(result);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
@@ -126,13 +146,9 @@ public class UserRequestAcceptFragment extends Fragment {
                 dbHelper.rejectRequest(Integer.parseInt(breakDownRequestId));
                 btnAccept.setEnabled(false);
                 String message = "Hi, Reject your request by provider. Thank you.";
-                if(ContextCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-                    sendSMS(String.valueOf(txtPhoneNo), v, message);
-                } else {
-                    ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
-                }
+
                 btnAccept.setVisibility(View.INVISIBLE);
-                Bundle result = new Bundle();;
+                Bundle result = new Bundle();
                 result.putString("USERNAME",username );
                 result.putString("USERID",userId );
                 result.putString("BREAKDOWNTYPE",breakDownType);
@@ -142,7 +158,13 @@ public class UserRequestAcceptFragment extends Fragment {
                 result.putString("DESCRIPTION",description );
                 result.putString("MESSAGE","Rejected" );
                 result.putString("ACTION","Reject" );
+                result.putString("IMAGEURL", imageUrl);
 
+                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    sendSMS(String.valueOf(phoneNo), v, message);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.SEND_SMS}, 100);
+                }
                 Fragment userRequestFragment = new UserRequestFragment();
                 userRequestFragment.setArguments(result);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager() ;
@@ -158,7 +180,7 @@ public class UserRequestAcceptFragment extends Fragment {
     }
     private void sendSMS(String txtPhoneNo, View v, String message){
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("6725580280", null, message, null, null);
+        smsManager.sendTextMessage(txtPhoneNo, null, message, null, null);
         Toast.makeText(v.getContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();
     }
 }
