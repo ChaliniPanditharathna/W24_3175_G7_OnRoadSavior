@@ -38,9 +38,9 @@ public class ProfileFragment extends Fragment {
     //initialize local db
     DBHelper DB;
 
-    TextView txtViewFullName, txtViewUserName;
+    TextView txtViewFullName, txtViewUserName, txtViewServiceCount, txtViewRate;
     EditText fullName, email, contactNum, location, serviceType;
-    String fullNameVal, usernameVal, emailVal, contactNumVal, userTypeVal, locationVal, serviceTypeVal;
+    String fullNameVal, usernameVal, emailVal, contactNumVal, userTypeVal, locationVal, serviceTypeVal, serviceCount, rate;
     ImageButton imgBtnUploadProPic;
     ImageView profilePic;
     FirebaseStorage storage;
@@ -55,6 +55,8 @@ public class ProfileFragment extends Fragment {
 
         txtViewFullName = view.findViewById(R.id.txtViewFullName);
         txtViewUserName = view.findViewById(R.id.txtViewUsername);
+        txtViewServiceCount = view.findViewById(R.id.txtViewServiceIconValueTxt);
+        txtViewRate = view.findViewById(R.id.txtViewRatingIconValueTxt);
 
         fullName = view.findViewById(R.id.editTextFullName);
         email = view.findViewById(R.id.editTextEmail);
@@ -80,11 +82,26 @@ public class ProfileFragment extends Fragment {
             if (currentUser != null) {
                 DB = new DBHelper(view.getContext());
                 UserHelperClass user = DB.getUserData(currentUser.getUid());
+                int serviceCountInt;
+                double rateDub;
 
                 if(user.getUserType().equalsIgnoreCase("Service Provider")){
 
                     locationVal = DB.getServiceProviderData(currentUser.getUid()).getLocation();
                     serviceTypeVal = DB.getServiceProviderData(currentUser.getUid()).getServiceType();
+
+                    serviceCountInt = DB.getCountOfServiceProvided(currentUser.getUid());
+                    txtViewServiceCount.setText(serviceCountInt+"");
+                    txtViewServiceCount.setEnabled(false);
+
+                    //rateDub = DB.getgetRating(currentUser.getUid());
+                    //txtViewRate.setText(rateDub+"");
+
+                }  else if(user.getUserType().equalsIgnoreCase("Service Requester")){
+
+                    serviceCountInt = DB.getCountOfServiceRequested(currentUser.getUid());
+                    txtViewServiceCount.setText(serviceCountInt+"");
+                    txtViewServiceCount.setEnabled(false);
                 }
 
                 displayUserProfile(user);
@@ -99,7 +116,6 @@ public class ProfileFragment extends Fragment {
 
     private void displayUserProfile(UserHelperClass user){
 
-
         fullNameVal = user.getFullName();
         usernameVal = user.getUserName();
         emailVal = user.getEmail();
@@ -107,10 +123,15 @@ public class ProfileFragment extends Fragment {
         userTypeVal = user.getUserType();
 
         txtViewFullName.setText(fullNameVal);
+        txtViewFullName.setEnabled(false);
         txtViewUserName.setText(usernameVal);
+        txtViewUserName.setEnabled(false);
         fullName.setText(fullNameVal);
+        fullName.setEnabled(false);
         email.setText(emailVal);
+        email.setEnabled(false);
         contactNum.setText(contactNumVal);
+        contactNum.setEnabled(false);
 
 
         if(userTypeVal.equalsIgnoreCase("Service Requester")){
@@ -124,7 +145,9 @@ public class ProfileFragment extends Fragment {
             location.setVisibility(View.VISIBLE);
 
             serviceType.setText(serviceTypeVal);
+            serviceType.setEnabled(false);
             location.setText(locationVal);
+            location.setEnabled(false);
         }
     }
 

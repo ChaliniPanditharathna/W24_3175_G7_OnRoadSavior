@@ -9,12 +9,15 @@
     android:background="@drawable/imgslide"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/navMenuProfilePic"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/logopic" />
+        android:layout_centerVertical="true"
+        android:src="@drawable/user" />
 
     <TextView
+        android:id="@+id/navMenuProfileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Subashini Piumali"
@@ -22,6 +25,7 @@
         android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/navMenuProfileEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="hewaihalages@student.douglascollege.ca"

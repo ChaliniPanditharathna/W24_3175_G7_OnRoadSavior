@@ -183,4 +183,43 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = "+breakDownRequestId+"");
     }
+
+    public int getCountOfServiceRequested(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE User_ID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        int count = 0;
+        count = cursor.getCount();
+        cursor.close();
+        return count;
+
+    }
+
+    public int getCountOfServiceProvided(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE Provider_ID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        int count = 0;
+        count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    /*
+    public double getRating(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT Rate FROM Rating WHERE UID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        double rate = cursor.getColumnIndex("rate"); // Get the rate from the cursor
+        cursor.close();
+
+        return rate;
+    }
+     */
 }

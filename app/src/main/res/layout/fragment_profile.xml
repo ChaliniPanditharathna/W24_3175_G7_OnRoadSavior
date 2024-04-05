@@ -145,7 +145,7 @@
                     android:layout_below="@+id/txtViewRatingIconValueTxt"
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
-                    android:text="Services"
+                    android:text="Rating"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
             </RelativeLayout>

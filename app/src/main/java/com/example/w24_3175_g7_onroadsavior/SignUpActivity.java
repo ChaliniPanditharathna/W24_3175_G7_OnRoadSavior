@@ -1,21 +1,16 @@
 package com.example.w24_3175_g7_onroadsavior;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         //widgets
         regFullName = findViewById(R.id.name);
-        regUserName = findViewById(R.id.username);
+        regUserName = findViewById(R.id.useremail);
         regEmail = findViewById(R.id.email);
         regContactNumber = findViewById(R.id.contactNumber);
         regPassword = findViewById(R.id.password);

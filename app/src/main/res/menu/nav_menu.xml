@@ -4,15 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
 
-    <group
-        android:checkableBehavior="single">
-
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/baseline_home_24"
             android:title="Home"/>
-    </group>
-    <item
+        <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/baseline_logout_24"
         android:title="Logout"/>
