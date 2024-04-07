@@ -2,6 +2,7 @@ package com.example.w24_3175_g7_onroadsavior.Model;
 
 public class ServiceProvider {
     private String id;
+    private String name;
     private String location;
     private String breakdownType;
     private float rating;
@@ -9,8 +10,9 @@ public class ServiceProvider {
     public ServiceProvider() {
     }
 
-    public ServiceProvider(String id, String location, String breakdownType, float rating) {
+    public ServiceProvider(String id, String name, String location, String breakdownType, float rating) {
         this.id = id;
+        this.name = name;
         this.location = location;
         this.breakdownType = breakdownType;
         this.rating = rating;
@@ -23,6 +25,14 @@ public class ServiceProvider {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLocation() {

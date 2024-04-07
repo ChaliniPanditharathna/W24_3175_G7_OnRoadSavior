@@ -167,7 +167,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("Location",address);
 
         db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ( '"+createdDate+"',  '"+createdDate+"',  '"+userID+"',  '"+providerID+"',  '"+breakdownType+"',  '"+address+"',  '"+description+"',  '"+image+"',  '"+status+"')\n");
-        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+providerID+"', 'You have a new request',  'Pending')\n");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+updatedDate+"','"+providerID+"', 'You have a new request',  'Pending')\n");
 
     }
 
@@ -182,7 +182,6 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("Rating", rating);
         db.update("ServiceProvider", values, "ID=?", new String[]{providerId});
-        db.close();
     }
 
     public float getProviderRating(String providerId) {
@@ -323,34 +322,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return nearbyProviders;
     }*/
 
-    @SuppressLint("Range")
-    public List<ServiceProvider> getAllProviders() {
-        List<ServiceProvider> providers = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM ServiceProvider", null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    // Create a ServiceProvider object from the cursor data
-                    ServiceProvider provider = new ServiceProvider();
-                    provider.setId(cursor.getString(cursor.getColumnIndex("id")));
-                    // Set other attributes as needed
-
-                    // Add the ServiceProvider object to the list
-                    providers.add(provider);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
-
-        // Close the database connection
-        db.close();
-
-        return providers;
-    }
-
-    @SuppressLint("Range")
+   /* @SuppressLint("Range")
     public List<ServiceProvider> getProvidersByCity(String city) {
         List<ServiceProvider> providers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -371,7 +344,79 @@ public class DBHelper extends SQLiteOpenHelper {
                     providers.add(provider);
                 } while (cursor.moveToNext());
             }
-            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return providers;
+    }*/
+
+    public List<ServiceProvider> getAllProviders() {
+        List<ServiceProvider> providers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM ServiceProvider", null);
+        if (cursor != null) {
+            try {
+                int idIndex = cursor.getColumnIndexOrThrow("ID");
+                int locationIndex = cursor.getColumnIndexOrThrow("Location");
+                int breakdownTypeIndex = cursor.getColumnIndexOrThrow("BreakDownType");
+                int ratingIndex = cursor.getColumnIndexOrThrow("Rating");
+
+                while (cursor.moveToNext()) {
+                    ServiceProvider provider = new ServiceProvider();
+                    provider.setId(cursor.getString(idIndex));
+                    provider.setLocation(cursor.getString(locationIndex));
+                    provider.setBreakdownType(cursor.getString(breakdownTypeIndex));
+                    provider.setRating(cursor.getFloat(ratingIndex));
+
+                    // Retrieve provider name from User table based on provider ID
+                    String providerId = cursor.getString(idIndex); // Assuming ID is the provider's ID
+                    String providerName = getProviderNameById(providerId);
+                    provider.setName(providerName);
+
+                    providers.add(provider);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return providers;
+    }
+
+    @SuppressLint("Range")
+    public List<ServiceProvider> getProvidersByCity(String city) {
+        List<ServiceProvider> providers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] selectionArgs = {city};
+        Cursor cursor = db.rawQuery("SELECT * FROM ServiceProvider WHERE Location = ?", selectionArgs);
+        if (cursor != null) {
+            try {
+                int idIndex = cursor.getColumnIndexOrThrow("ID");
+                int locationIndex = cursor.getColumnIndexOrThrow("Location");
+                int breakdownTypeIndex = cursor.getColumnIndexOrThrow("BreakDownType");
+                int ratingIndex = cursor.getColumnIndexOrThrow("Rating");
+
+                while (cursor.moveToNext()) {
+                    ServiceProvider provider = new ServiceProvider();
+                    provider.setId(cursor.getString(idIndex));
+                    provider.setLocation(cursor.getString(locationIndex));
+                    provider.setBreakdownType(cursor.getString(breakdownTypeIndex));
+                    provider.setRating(cursor.getFloat(ratingIndex));
+
+                    // Retrieve provider name from User table based on provider ID
+                    String providerId = cursor.getString(idIndex); // Assuming ID is the provider's ID
+                    String providerName = getProviderNameById(providerId);
+                    provider.setName(providerName);
+
+                    providers.add(provider);
+                }
+            } finally {
+                cursor.close();
+            }
         }
 
         // Close the database connection
@@ -380,6 +425,49 @@ public class DBHelper extends SQLiteOpenHelper {
         return providers;
     }
 
+    private String getProviderNameById(String providerId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String providerName = null;
 
+        Cursor cursor = db.rawQuery("SELECT Name FROM User WHERE ID = ?", new String[]{providerId});
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndexOrThrow("Name");
+                    providerName = cursor.getString(nameIndex);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return providerName;
+    }
+
+    @SuppressLint("Range")
+    public String getUserName(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Name FROM User WHERE ID = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{userId});
+        String userName = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            userName = cursor.getString(cursor.getColumnIndex("Name"));
+            cursor.close();
+        }
+        return userName;
+    }
+
+    @SuppressLint("Range")
+    public String getProviderName(String providerId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Name FROM User WHERE ID = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{providerId});
+        String providerName = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            providerName = cursor.getString(cursor.getColumnIndex("Name"));
+            cursor.close();
+        }
+        return providerName;
+    }
 
 }

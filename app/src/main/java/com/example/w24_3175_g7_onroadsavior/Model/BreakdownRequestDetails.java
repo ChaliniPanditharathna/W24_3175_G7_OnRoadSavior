@@ -6,6 +6,8 @@ public class BreakdownRequestDetails {
     private String updatedDate;
     private String userId;
     private String providerId;
+    private String userName;
+    private String providerName;
     private String breakdownType;
     private String currentLocation;
     private String description;
@@ -42,6 +44,21 @@ public class BreakdownRequestDetails {
         this.providerRating = 0.0f;
     }
 
+    public BreakdownRequestDetails(String createdDate, String updatedDate, String userId, String providerId, String userName, String providerName, String breakdownType, String currentLocation, String description, String imageUrl, String status, float providerRating) {
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.userId = userId;
+        this.providerId = providerId;
+        this.userName = userName;
+        this.providerName = providerName;
+        this.breakdownType = breakdownType;
+        this.currentLocation = currentLocation;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.providerRating = providerRating;
+    }
+
     public BreakdownRequestDetails() {
 
     }
@@ -76,6 +93,22 @@ public class BreakdownRequestDetails {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
     }
 
     public String getBreakdownType() {
