@@ -2,6 +2,7 @@ package com.example.w24_3175_g7_onroadsavior.Database;
 
 import static java.time.LocalDate.now;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,12 +10,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
 import com.example.w24_3175_g7_onroadsavior.UserHelperClass;
 
 import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "onRoadSaviorDB";
@@ -30,7 +33,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE User ( ID TEXT PRIMARY KEY,Name VARCHAR(255) NOT NULL,Username VARCHAR(100) NOT NULL,Email VARCHAR(255) NOT NULL, Phone_NO VARCHAR(20), User_Type VARCHAR(255) NOT NULL, Created_Date LOCALDATE NOT NULL)");
 
-        db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
+        //db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
+
+        db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255), Rating REAL DEFAULT 0\n)");
+
 
         db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
 
@@ -171,6 +177,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return  cursor;
     }
 
+    public void updateProviderRating(String providerId, float rating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Rating", rating);
+        db.update("ServiceProvider", values, "ID=?", new String[]{providerId});
+        db.close();
+    }
+
+    public float getProviderRating(String providerId) {
+        float rating = -1;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Rating FROM ServiceProvider WHERE ID = ?", new String[]{providerId});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            rating = cursor.getFloat(0);
+            cursor.close();
+        }
+
+        return rating;
+    }
+
     public Cursor getRequestData(String uid) {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
@@ -262,4 +290,96 @@ public class DBHelper extends SQLiteOpenHelper {
         return rate;
     }
      */
+
+    /*public List<ServiceProvider> getNearbyProviders(String cityName) {
+        List<ServiceProvider> nearbyProviders = new ArrayList<>();
+
+        // Perform a database query to retrieve providers within the specified city
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"ID", "Location", "BreakDownType", "Rating"};
+        String selection = "Location LIKE ?";
+        String[] selectionArgs = {"%" + cityName + "%"};
+        Cursor cursor = db.query("ServiceProvider", columns, selection, selectionArgs, null, null, null);
+
+        // Iterate over the cursor and populate the list of nearby providers
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex("ID"));
+                @SuppressLint("Range") String location = cursor.getString(cursor.getColumnIndex("Location"));
+                @SuppressLint("Range") String breakdownType = cursor.getString(cursor.getColumnIndex("BreakDownType"));
+                @SuppressLint("Range") float rating = cursor.getFloat(cursor.getColumnIndex("Rating"));
+
+                // Create a ServiceProvider object and add it to the list
+                ServiceProvider provider = new ServiceProvider(id, location, breakdownType, rating);
+                nearbyProviders.add(provider);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return nearbyProviders;
+    }*/
+
+    @SuppressLint("Range")
+    public List<ServiceProvider> getAllProviders() {
+        List<ServiceProvider> providers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM ServiceProvider", null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    // Create a ServiceProvider object from the cursor data
+                    ServiceProvider provider = new ServiceProvider();
+                    provider.setId(cursor.getString(cursor.getColumnIndex("id")));
+                    // Set other attributes as needed
+
+                    // Add the ServiceProvider object to the list
+                    providers.add(provider);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return providers;
+    }
+
+    @SuppressLint("Range")
+    public List<ServiceProvider> getProvidersByCity(String city) {
+        List<ServiceProvider> providers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] selectionArgs = {city};
+        Cursor cursor = db.rawQuery("SELECT * FROM ServiceProvider WHERE Location = ?", selectionArgs);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    // Create a ServiceProvider object from the cursor data
+                    ServiceProvider provider = new ServiceProvider();
+                    provider.setId(cursor.getString(cursor.getColumnIndex("ID")));
+                    provider.setLocation(cursor.getString(cursor.getColumnIndex("Location")));
+                    provider.setBreakdownType(cursor.getString(cursor.getColumnIndex("BreakDownType")));
+                    provider.setRating(cursor.getFloat(cursor.getColumnIndex("Rating")));
+
+                    // Add the ServiceProvider object to the list
+                    providers.add(provider);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return providers;
+    }
+
+
+
 }

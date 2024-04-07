@@ -40,4 +40,8 @@
     <string name="textBreakdownDescription">Description</string>
     <string name="btnNext">Next</string>
     <string name="OK">OK</string>
+    <string name="channel_name">Your Channel Name</string>
+    <string name="channel_description">Your Channel Description</string>
+    <string name="lblSearchProvider">Search</string>
+    <string name="hintSearchProvider">Search provider by city</string>
 </resources>

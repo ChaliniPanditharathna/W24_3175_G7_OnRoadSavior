@@ -8,25 +8,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Parcelable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
+import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +39,13 @@ public class BreakdownRequestFragment extends Fragment {
     String providerId;
     String description;
     String status;
+    List<ServiceProvider> nearbyProviders;
+
+    String breakdownType;
+    String address;
+    String imageUrl;
+    EditText editTextDescription;
+    EditText editTextSearchProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,61 +54,119 @@ public class BreakdownRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_breakdown_request, container, false);
         dbHelper = new DBHelper(view.getContext());
         Button buttonRequestSubmit = view.findViewById(R.id.buttonRequestSubmit);
-        EditText editTextDescription = view.findViewById(R.id.editTextRequestDescription);
+        editTextDescription = view.findViewById(R.id.editTextRequestDescription);
+        editTextSearchProvider = view.findViewById(R.id.editTextSearchProvider);
+
 
         Bundle bundle = this.getArguments();
-        String breakdownType = bundle.getString("BREAKDOWNTYPE");
-        String address = bundle.getString("CURRENTLOCATION");
-        String imageUrl = bundle.getString("IMAGE_URL");
+        breakdownType = bundle.getString("BREAKDOWNTYPE");
+        address = bundle.getString("CURRENTLOCATION");
+        imageUrl = bundle.getString("IMAGE_URL");
+
+        editTextSearchProvider.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    String searchCity = editTextSearchProvider.getText().toString();
+                    filterProvidersByCity(searchCity);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         buttonRequestSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String currentDateAndTime = sdf.format(new Date());
-
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                if (user != null) {
-                    userId = user.getUid();
-                } else {
-                    Log.e("Error", "Can't get user Id");
-                }
-                providerId = "5utKiBSA4Ec60prqeE1kGs56uq63";
-
-                description = editTextDescription.getText().toString();
-
-                status = "Pending";
-
-                dbHelper.addRequest(currentDateAndTime, currentDateAndTime, userId, providerId, breakdownType, address, description, imageUrl, status);
-
-                // Show results in a popup dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Breakdown Request Details");
-                builder.setMessage("Created Date: " + currentDateAndTime + "\n\n" +
-                        "Updated Date: " + currentDateAndTime + "\n\n" +
-                        "User ID: " + userId + "\n\n" +
-                        "Provider ID: " + providerId + "\n\n" +
-                        "Breakdown Type: " + breakdownType + "\n\n" +
-                        "Current Location: " + address + "\n\n" +
-                        "Description: " + description + "\n\n" +
-                        "Image: " + imageUrl +"\n\n" +
-                        "Status: " + status);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-                Fragment fragment = new HistroyFragment();
-                replaceFragment(fragment);
+                showProviderSelectionDialog();
             }
         });
 
         return view;
+    }
+
+    private void filterProvidersByCity(String city) {
+        if (city.isEmpty()) {
+            nearbyProviders = dbHelper.getAllProviders();
+        } else {
+            nearbyProviders = dbHelper.getProvidersByCity(city);
+        }
+    }
+
+    private void showProviderSelectionDialog() {
+        if (nearbyProviders != null && !nearbyProviders.isEmpty()) {
+            CharSequence[] providerNames = new CharSequence[nearbyProviders.size()];
+            for (int i = 0; i < nearbyProviders.size(); i++) {
+                providerNames[i] = nearbyProviders.get(i).getId();
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Select Provider");
+            builder.setItems(providerNames, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    providerId = nearbyProviders.get(which).getId();
+                    createBreakdownRequest();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("No Providers Found");
+            builder.setMessage("No providers found for the specified city.");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void createBreakdownRequest() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            userId = user.getUid();
+        } else {
+            Log.e("Error", "Can't get user Id");
+        }
+
+        description = editTextDescription.getText().toString();
+
+        status = "Pending";
+
+        dbHelper.addRequest(currentDateAndTime, currentDateAndTime, userId, providerId, breakdownType, address, description, imageUrl, status);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Breakdown Request Details");
+        builder.setMessage("Created Date: " + currentDateAndTime + "\n\n" +
+                "Updated Date: " + currentDateAndTime + "\n\n" +
+                "User ID: " + userId + "\n\n" +
+                "Provider ID: " + providerId + "\n\n" +
+                "Breakdown Type: " + breakdownType + "\n\n" +
+                "Current Location: " + address + "\n\n" +
+                "Description: " + description + "\n\n" +
+                "Image: " + imageUrl +"\n\n" +
+                "Status: " + status);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Fragment fragment = new HistroyFragment();
+        replaceFragment(fragment);
     }
 
     private void replaceFragment(Fragment fragment) {
