@@ -33,6 +33,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
 
         db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
+
+        db.execSQL("CREATE TABLE Notification ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date LOCALDATE NOT NULL,Updated_Date LOCALDATE, RECIVER_ID Text NOT NULL, Message TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (RECIVER_ID) REFERENCES User(ID))");
     }
 
     @Override
@@ -159,6 +161,8 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("Location",address);
 
         db.execSQL("INSERT INTO BreakDownRequest (Created_Date, Updated_Date, User_ID, Provider_ID, Breakdown_Type, Location, Description, Image, Status) VALUES ( '"+createdDate+"',  '"+createdDate+"',  '"+userID+"',  '"+providerID+"',  '"+breakdownType+"',  '"+address+"',  '"+description+"',  '"+image+"',  '"+status+"')\n");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+providerID+"', 'You have a new request',  'Pending')\n");
+
     }
 
     public Cursor getBreakdownRequestData(){
@@ -181,20 +185,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void acceptRequest(int breakDownRequestId) {
+    public void acceptRequest(int breakDownRequestId, String userId, String createdDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE BreakDownRequest SET Status = 'Accept' WHERE ID = " + breakDownRequestId + "");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+userId+"', 'Your request is accepted',  'Pending')\n");
+
     }
 
-    public void rejectRequest(int breakDownRequestId) {
+    public void rejectRequest(int breakDownRequestId, String userId, String createdDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE BreakDownRequest SET Status = 'Reject' WHERE ID = " + breakDownRequestId + "");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('2024-04-5', NULL,'"+userId+"', 'Your have new request',  'Pending')\n");
+        db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+userId+"', 'Your request is rejeced',  'Pending')\n");
+
     }
 
-    public boolean updateStatus(String breakDownRequestId) {
+    public boolean updateStatus(String breakDownRequestId,String userId, String createdDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.execSQL("UPDATE BreakDownRequest SET Status = 'Done' WHERE ID = " + breakDownRequestId + "");
+            db.execSQL("INSERT INTO Notification (Created_Date, Updated_Date, RECIVER_ID, Message, Status) VALUES ('"+createdDate+"', '"+createdDate+"','"+userId+"', 'Your request is completed',  'Pending')\n");
+
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -225,6 +236,17 @@ public class DBHelper extends SQLiteOpenHelper {
         count = cursor.getCount();
         cursor.close();
         return count;
+    }
+    public Cursor getNotificationDetails(String uid){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select ID, Message, Updated_Date from Notification WHERE RECIVER_ID = '"+uid + "' ORDER BY Updated_Date DESC", null);
+
+        return  cursor;
+    }
+
+    public void updateNotificationStatus(int notificationId, String currentDateAndTime) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.execSQL("UPDATE Notification SET Status = 'Viewed', Updated_Date = '"+currentDateAndTime+"' WHERE ID = "+notificationId);
     }
 
     /*
