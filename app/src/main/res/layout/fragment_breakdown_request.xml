@@ -11,22 +11,48 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewTitleDescription"
+            android:id="@+id/textViewLabelSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="64dp"
+            android:text="@string/lblSearchProvider"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextSearchProvider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:ems="10"
+            android:hint="@string/hintSearchProvider"
+            android:inputType="text"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewLabelSearch"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewTitleDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="180dp"
             android:text="@string/textBreakdownDescription"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewLabelSearch" />
 
         <EditText
             android:id="@+id/editTextRequestDescription"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="53dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="100dp"
             android:ems="10"
@@ -34,8 +60,10 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/buttonRequestSubmit"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitleDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitleDescription"
+            app:layout_constraintVertical_bias="0.244" />
 
         <Button
             android:id="@+id/buttonRequestSubmit"

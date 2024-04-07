@@ -2,10 +2,16 @@ package com.example.w24_3175_g7_onroadsavior;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +19,11 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +46,10 @@ public class HistroyFragment extends Fragment {
     private AdapterBreakdownRequestDetails adapterBreakdownRequestDetails;
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
     DBHelper dbHelper;
+    String providerId;
+
+   /* private final String CHANNEL_ID = "BreakdownNotification";
+    private final int NOTIFICATION_ID = 1;*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,13 +92,13 @@ public class HistroyFragment extends Fragment {
                 String createdDate = (createdDateIndex != -1) ? cursor.getString(createdDateIndex) : "";
                 String updatedDate = (updatedDateIndex != -1) ? cursor.getString(updatedDateIndex) : "";
                 String userId = (userIdIndex != -1) ? cursor.getString(userIdIndex) : "";
-                String providerId = (providerIdIndex != -1) ? cursor.getString(providerIdIndex) : "";
+                providerId = (providerIdIndex != -1) ? cursor.getString(providerIdIndex) : "";
                 String breakdownType = (breakdownTypeIndex != -1) ? cursor.getString(breakdownTypeIndex) : "";
                 String location = (locationIndex != -1) ? cursor.getString(locationIndex) : "";
                 String description = (descriptionIndex != -1) ? cursor.getString(descriptionIndex) : "";
                 String image = (imageIndex != -1) ? cursor.getString(imageIndex) : "";
-                String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
-               // String status ="Completed";
+               // String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
+                String status ="Completed";
 
                 float providerRating = dbHelper.getProviderRating(providerId);
                 BreakdownRequestDetails req = new BreakdownRequestDetails(
@@ -99,15 +113,66 @@ public class HistroyFragment extends Fragment {
                         status,
                         providerRating
                 );
-                if (status.equals("Completed") && providerRating == 0.0) {
+                if (status.equals("Completed") /*&& providerRating == 0.0*/) {
                     showRatingDialog(providerId);
                 }
                 breakdownRequestDetailsList.add(req);
             } while (cursor.moveToNext());
             cursor.close();
+            // Update the RecyclerView
+           // adapterBreakdownRequestDetails.notifyDataSetChanged();
         }
         return view;
     }
+
+    /*@Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        checkAndNotifyUser();
+    }
+
+    private void checkAndNotifyUser() {
+        for (BreakdownRequestDetails request : breakdownRequestDetailsList) {
+            if (request.getStatus().equals("Completed")) {
+                sendNotification();
+                break;
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void sendNotification() {
+        if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+            createNotificationChannel();
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle("Breakdown Request Completed")
+                    .setContentText("Please rate your experience with the provider")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
+
+            @SuppressLint("UnspecifiedImmutableFlag")
+            int flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        } else {
+            Toast.makeText(requireContext(), "Notifications are disabled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "BreakdownNotificationChannel";
+            String description = "Channel for Breakdown Notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }*/
 
     public void updateRequestDetails(List<BreakdownRequestDetails> newRequestDetailsList) {
         breakdownRequestDetailsList.clear();
@@ -115,7 +180,7 @@ public class HistroyFragment extends Fragment {
         adapterBreakdownRequestDetails.notifyDataSetChanged();
     }
 
-    private void showRatingDialog(String providerId) {
+   private void showRatingDialog(String providerId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.rating_dialog, null);
