@@ -97,15 +97,19 @@ public class HistroyFragment extends Fragment {
                 String location = (locationIndex != -1) ? cursor.getString(locationIndex) : "";
                 String description = (descriptionIndex != -1) ? cursor.getString(descriptionIndex) : "";
                 String image = (imageIndex != -1) ? cursor.getString(imageIndex) : "";
-               // String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
-                String status ="Completed";
+                String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
+                //String status ="Done";
 
                 float providerRating = dbHelper.getProviderRating(providerId);
+                String userName = dbHelper.getUserName(userId);
+                String providerName = dbHelper.getProviderName(providerId);
                 BreakdownRequestDetails req = new BreakdownRequestDetails(
                         createdDate,
                         updatedDate,
                         userId,
                         providerId,
+                        userName,
+                        providerName,
                         breakdownType,
                         location,
                         description,
@@ -113,7 +117,7 @@ public class HistroyFragment extends Fragment {
                         status,
                         providerRating
                 );
-                if (status.equals("Completed") /*&& providerRating == 0.0*/) {
+                if (status.equals("Done") && providerRating == 0.0) {
                     showRatingDialog(providerId);
                 }
                 breakdownRequestDetailsList.add(req);

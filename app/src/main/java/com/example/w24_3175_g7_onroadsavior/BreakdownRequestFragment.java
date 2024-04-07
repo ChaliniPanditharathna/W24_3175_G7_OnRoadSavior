@@ -94,11 +94,48 @@ public class BreakdownRequestFragment extends Fragment {
         }
     }
 
-    private void showProviderSelectionDialog() {
+    /*private void showProviderSelectionDialog() {
         if (nearbyProviders != null && !nearbyProviders.isEmpty()) {
             CharSequence[] providerNames = new CharSequence[nearbyProviders.size()];
             for (int i = 0; i < nearbyProviders.size(); i++) {
                 providerNames[i] = nearbyProviders.get(i).getId();
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Select Provider");
+            builder.setItems(providerNames, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    providerId = nearbyProviders.get(which).getId();
+                    createBreakdownRequest();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("No Providers Found");
+            builder.setMessage("No providers found for the specified city.");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }*/
+    private void showProviderSelectionDialog() {
+        if (nearbyProviders != null && !nearbyProviders.isEmpty()) {
+            CharSequence[] providerNames = new CharSequence[nearbyProviders.size()];
+            for (int i = 0; i < nearbyProviders.size(); i++) {
+                String name = nearbyProviders.get(i).getName();
+                if (name != null) {
+                    providerNames[i] = name;
+                } else {
+                    providerNames[i] = "Unknown Provider";
+                }
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -131,6 +168,8 @@ public class BreakdownRequestFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
 
+        String updatedDate ="";
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
@@ -143,12 +182,12 @@ public class BreakdownRequestFragment extends Fragment {
 
         status = "Pending";
 
-        dbHelper.addRequest(currentDateAndTime, currentDateAndTime, userId, providerId, breakdownType, address, description, imageUrl, status);
+        dbHelper.addRequest(currentDateAndTime, updatedDate, userId, providerId, breakdownType, address, description, imageUrl, status);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Breakdown Request Details");
         builder.setMessage("Created Date: " + currentDateAndTime + "\n\n" +
-                "Updated Date: " + currentDateAndTime + "\n\n" +
+                "Updated Date: " + updatedDate + "\n\n" +
                 "User ID: " + userId + "\n\n" +
                 "Provider ID: " + providerId + "\n\n" +
                 "Breakdown Type: " + breakdownType + "\n\n" +

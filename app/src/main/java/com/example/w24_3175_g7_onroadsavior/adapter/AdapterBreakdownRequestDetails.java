@@ -60,8 +60,8 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
 
         holder.textViewCreatedDate.setText(requestDetails.getCreatedDate());
         holder.textViewUpdatedDate.setText(requestDetails.getUpdatedDate());
-        holder.textViewUserId.setText(requestDetails.getUserId());
-        holder.textViewProviderId.setText(requestDetails.getProviderId());
+        holder.textViewUserId.setText(requestDetails.getUserName());
+        holder.textViewProviderId.setText(requestDetails.getProviderName());
         holder.textViewBreakdownType.setText(requestDetails.getBreakdownType());
         holder.textViewCurrentLocation.setText(requestDetails.getCurrentLocation());
         holder.textViewDescription.setText(requestDetails.getDescription());
