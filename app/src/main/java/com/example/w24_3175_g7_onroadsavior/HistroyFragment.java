@@ -97,8 +97,8 @@ public class HistroyFragment extends Fragment {
                 String location = (locationIndex != -1) ? cursor.getString(locationIndex) : "";
                 String description = (descriptionIndex != -1) ? cursor.getString(descriptionIndex) : "";
                 String image = (imageIndex != -1) ? cursor.getString(imageIndex) : "";
-               // String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
-                String status ="Done";
+                String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
+                //String status ="Done";
 
                 float providerRating = dbHelper.getProviderRating(providerId);
                 String userName = dbHelper.getUserName(userId);
