@@ -173,10 +173,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getBreakdownRequestData(){
+    /*public Cursor getBreakdownRequestData(){
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select *  from BreakDownRequest", null);
         return  cursor;
+    }*/
+
+    public Cursor getBreakdownRequestDataForUser(String userId){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE User_ID = ?";
+        Cursor cursor = DB.rawQuery(query, new String[]{userId});
+        return cursor;
     }
 
     public void updateProviderRating(String providerId, float rating) {
@@ -413,7 +420,6 @@ public class DBHelper extends SQLiteOpenHelper {
         Map<String, String> providerIdAndStatusMap = new HashMap<>();
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null) {
-            // SQL query to retrieve provider ID and status from BreakDownRequest table
             String query = "SELECT Provider_ID, Status FROM BreakDownRequest";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
