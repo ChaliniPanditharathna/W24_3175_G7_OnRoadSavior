@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,6 +55,10 @@ public class ProviderRequestHistoryFragment extends Fragment {
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
         ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
 
+        Button trackRoute = v.findViewById(R.id.trackRoute);
+        if(message.equals("Successfully Done")){
+            trackRoute.setEnabled(false);
+        }
         StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
         // Check if the ImageView is not null before loading the image
         if (userPic != null) {
@@ -70,7 +75,7 @@ public class ProviderRequestHistoryFragment extends Fragment {
 
         String[] parts = imageUrl.split("/");
         String imageId = parts[parts.length - 1];
-        Log.d("TESTDEMO", imageId);
+
         if (userBreakdownPic != null) {
             StorageReference breakdownImageRef = storageReference.child("images/" + imageId);
             breakdownImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
