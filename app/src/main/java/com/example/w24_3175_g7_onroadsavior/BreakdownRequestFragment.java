@@ -46,6 +46,7 @@ public class BreakdownRequestFragment extends Fragment {
     String imageUrl;
     EditText editTextDescription;
     EditText editTextSearchProvider;
+    String name;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,43 +95,11 @@ public class BreakdownRequestFragment extends Fragment {
         }
     }
 
-    /*private void showProviderSelectionDialog() {
-        if (nearbyProviders != null && !nearbyProviders.isEmpty()) {
-            CharSequence[] providerNames = new CharSequence[nearbyProviders.size()];
-            for (int i = 0; i < nearbyProviders.size(); i++) {
-                providerNames[i] = nearbyProviders.get(i).getId();
-            }
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Select Provider");
-            builder.setItems(providerNames, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    providerId = nearbyProviders.get(which).getId();
-                    createBreakdownRequest();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("No Providers Found");
-            builder.setMessage("No providers found for the specified city.");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-    }*/
     private void showProviderSelectionDialog() {
         if (nearbyProviders != null && !nearbyProviders.isEmpty()) {
             CharSequence[] providerNames = new CharSequence[nearbyProviders.size()];
             for (int i = 0; i < nearbyProviders.size(); i++) {
-                String name = nearbyProviders.get(i).getName();
+                name = nearbyProviders.get(i).getName();
                 if (name != null) {
                     providerNames[i] = name;
                 } else {
@@ -188,8 +157,8 @@ public class BreakdownRequestFragment extends Fragment {
         builder.setTitle("Breakdown Request Details");
         builder.setMessage("Created Date: " + currentDateAndTime + "\n\n" +
                 "Updated Date: " + updatedDate + "\n\n" +
-                "User ID: " + userId + "\n\n" +
-                "Provider ID: " + providerId + "\n\n" +
+                /*"User Name: " + userName + "\n\n" +*/
+                "Provider Name: " + name + "\n\n" +
                 "Breakdown Type: " + breakdownType + "\n\n" +
                 "Current Location: " + address + "\n\n" +
                 "Description: " + description + "\n\n" +
