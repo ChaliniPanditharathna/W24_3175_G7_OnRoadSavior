@@ -104,21 +104,6 @@ public class UserHomeFragment extends Fragment {
         }
     }
 
-    /*private void rateProvider() {
-
-        String providerId = "123";
-        String status = "Done";
-
-        float providerRating = 0.0f;
-
-        if (status.equals("Done")) {
-            if (providerRating == 0.0f) {
-                showRatingDialog(providerId);
-            }
-        }
-    }*/
-
-
 
     private void showRatingDialog(String providerId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -142,7 +127,6 @@ public class UserHomeFragment extends Fragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Handle cancellation
                         Toast.makeText(getContext(), "Rating cancelled", Toast.LENGTH_SHORT).show();
                     }
                 })

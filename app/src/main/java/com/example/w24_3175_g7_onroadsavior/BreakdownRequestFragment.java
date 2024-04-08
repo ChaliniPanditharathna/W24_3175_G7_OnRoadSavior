@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
@@ -151,7 +152,7 @@ public class BreakdownRequestFragment extends Fragment {
 
         status = "Pending";
 
-        dbHelper.addRequest(currentDateAndTime, updatedDate, userId, providerId, breakdownType, address, description, imageUrl, status);
+       // dbHelper.addRequest(currentDateAndTime, updatedDate, userId, providerId, breakdownType, address, description, imageUrl, status);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Breakdown Request Details");
@@ -167,14 +168,22 @@ public class BreakdownRequestFragment extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dbHelper.addRequest(currentDateAndTime, updatedDate, userId, providerId, breakdownType, address, description, imageUrl, status);
+                Fragment fragment = new HistroyFragment();
+                replaceFragment(fragment);
                 dialog.dismiss();
             }
-        });
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getContext(), "Request cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                });
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        Fragment fragment = new HistroyFragment();
-        replaceFragment(fragment);
+        /*Fragment fragment = new HistroyFragment();
+        replaceFragment(fragment);*/
     }
 
     private void replaceFragment(Fragment fragment) {
