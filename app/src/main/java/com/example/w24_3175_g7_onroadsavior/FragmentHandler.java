@@ -169,6 +169,7 @@ public class FragmentHandler extends AppCompatActivity {
                 if(user.getUserType().equalsIgnoreCase("Service Requester")){
                     replaceFragment(new UserHomeFragment(), currentUser);
                 }
+                fab.setVisibility(View.VISIBLE);
                 return  true;
             }
             if(item.getItemId() == R.id.history){
