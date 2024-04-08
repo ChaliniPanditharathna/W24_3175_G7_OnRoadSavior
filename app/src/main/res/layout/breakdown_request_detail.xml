@@ -171,13 +171,25 @@
 
             </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonTrackRoute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track Route"
+                android:onClick="onTrackRouteButtonClick" />
+
+        </LinearLayout>
+
             <ImageView
                 android:id="@+id/imageViewImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" />
-
-            <!-- You can add more LinearLayouts for additional TextViews if needed -->
 
         </LinearLayout>
 

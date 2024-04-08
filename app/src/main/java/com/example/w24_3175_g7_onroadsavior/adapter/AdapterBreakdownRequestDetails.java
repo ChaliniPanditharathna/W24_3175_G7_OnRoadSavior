@@ -1,11 +1,17 @@
 package com.example.w24_3175_g7_onroadsavior.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +24,7 @@ import java.util.List;
 
 public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<AdapterBreakdownRequestDetails.ViewHolder> {
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
+    private Context context;
 
     public interface OnRatingProvidedListener {
         void onRatingProvided(int position, float rating);
@@ -29,9 +36,11 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
     }
 
-    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, OnRatingProvidedListener ratingListener) {
+    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, OnRatingProvidedListener ratingListener,
+                                          Context context) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
         this.ratingListener = ratingListener;
+        this.context = context;
     }
 
     public List<BreakdownRequestDetails> getBreakdownRequestDetailsList() {
@@ -67,20 +76,30 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         holder.textViewDescription.setText(requestDetails.getDescription());
         Glide.with(holder.itemView).load(requestDetails.getImageUrl()).into(holder.imageViewImage);
         holder.textViewStatus.setText(requestDetails.getStatus());
-        /*holder.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                if (ratingListener != null) {
-                    ratingListener.onRatingProvided(position, rating);
-                }
+
+        holder.buttonTrackRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String providerLocation = requestDetails.getProviderLocation();
+                String userLocation = requestDetails.getCurrentLocation();
+
+                Log.d("providerLocation" ,providerLocation);
+                Log.d("userLocation", userLocation);
+
+                Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" + providerLocation + "&destination=" + userLocation);
+
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                context.startActivity(mapIntent);
+
+                /*if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(mapIntent);
+                } else {
+                    Toast.makeText(context, "Failed to open Google Maps", Toast.LENGTH_SHORT).show();
+                }*/
             }
-        });*/
-        /*float providerRating = requestDetails.getProviderRating();
-        if (providerRating >= 0) {
-            holder.ratingBar.setRating(providerRating);
-        } else {
-            holder.ratingBar.setRating(0);
-            holder.ratingBar.setEnabled(false);
-        }*/
+        });
     }
 
     @Override
@@ -99,6 +118,7 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
         TextView textViewDescription;
         ImageView imageViewImage;
         TextView textViewStatus;
+        Button buttonTrackRoute;
 
        // RatingBar ratingBar;
         public ViewHolder(@NonNull View itemView) {
@@ -112,6 +132,7 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
             imageViewImage = itemView.findViewById(R.id.imageViewImage); // Initialize ImageView if displaying images
             textViewStatus = itemView.findViewById(R.id.textViewStatus);
+            buttonTrackRoute = itemView.findViewById(R.id.buttonTrackRoute);
          //   ratingBar = itemView.findViewById(R.id.ratingBar);
         }
     }
