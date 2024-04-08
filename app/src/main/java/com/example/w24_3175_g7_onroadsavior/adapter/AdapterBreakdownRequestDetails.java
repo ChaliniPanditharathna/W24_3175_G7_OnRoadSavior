@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,20 +24,20 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
     private Context context;
 
-    public interface OnRatingProvidedListener {
+    /*public interface OnRatingProvidedListener {
         void onRatingProvided(int position, float rating);
-    }
+    }*/
 
-    private OnRatingProvidedListener ratingListener;
+    //private OnRatingProvidedListener ratingListener;
 
     public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
     }
 
-    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, OnRatingProvidedListener ratingListener,
+    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, /*OnRatingProvidedListener ratingListener,*/
                                           Context context) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
-        this.ratingListener = ratingListener;
+        /*this.ratingListener = ratingListener;*/
         this.context = context;
     }
 
