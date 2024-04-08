@@ -40,7 +40,7 @@ public class HistroyFragment extends Fragment {
         breakdownRequestDetailsList = new ArrayList<>();
         adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList);
 
-        AdapterBreakdownRequestDetails.OnRatingProvidedListener ratingListener = new AdapterBreakdownRequestDetails.OnRatingProvidedListener() {
+        /*AdapterBreakdownRequestDetails.OnRatingProvidedListener ratingListener = new AdapterBreakdownRequestDetails.OnRatingProvidedListener() {
             @Override
             public void onRatingProvided(int position, float rating) {
                 BreakdownRequestDetails request = breakdownRequestDetailsList.get(position);
@@ -48,9 +48,9 @@ public class HistroyFragment extends Fragment {
                 request.setProviderRating(rating);
                 adapterBreakdownRequestDetails.notifyItemChanged(position);
             }
-        };
+        };*/
 
-        adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList, ratingListener,getContext());
+        adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList, /*ratingListener,*/getContext());
 
         recyclerViewHistory.setAdapter(adapterBreakdownRequestDetails);
 
@@ -94,12 +94,11 @@ public class HistroyFragment extends Fragment {
                         description,
                         image,
                         status,
-                        providerRating,
                         providerLocation
                 );
-                if (status.equals("Done") && providerRating == 0.0) {
+                /*if (status.equals("Done") && providerRating == 0.0) {
                     showRatingDialog(providerId);
-                }
+                }*/
                 breakdownRequestDetailsList.add(req);
             } while (cursor.moveToNext());
             cursor.close();
@@ -115,7 +114,7 @@ public class HistroyFragment extends Fragment {
         adapterBreakdownRequestDetails.notifyDataSetChanged();
     }
 
-   private void showRatingDialog(String providerId) {
+  /* private void showRatingDialog(String providerId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.rating_dialog, null);
@@ -142,5 +141,5 @@ public class HistroyFragment extends Fragment {
                     }
                 })
                 .create().show();
-    }
+    }*/
 }

@@ -15,9 +15,8 @@ public class BreakdownRequestDetails {
     private String status;
     private String providerLocation;
 
-    private float providerRating;
 
-    public BreakdownRequestDetails(String createdDate, String updatedDate, String userId, String providerId, String userName, String providerName, String breakdownType, String currentLocation, String description, String imageUrl, String status, float providerRating, String providerLocation) {
+    public BreakdownRequestDetails(String createdDate, String updatedDate, String userId, String providerId, String userName, String providerName, String breakdownType, String currentLocation, String description, String imageUrl, String status, String providerLocation) {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.userId = userId;
@@ -29,7 +28,6 @@ public class BreakdownRequestDetails {
         this.description = description;
         this.imageUrl = imageUrl;
         this.status = status;
-        this.providerRating = providerRating;
         this.providerLocation = providerLocation;
     }
 
@@ -123,14 +121,6 @@ public class BreakdownRequestDetails {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public float getProviderRating() {
-        return providerRating;
-    }
-
-    public void setProviderRating(float providerRating) {
-        this.providerRating = providerRating;
     }
 
     public String getProviderLocation() {
