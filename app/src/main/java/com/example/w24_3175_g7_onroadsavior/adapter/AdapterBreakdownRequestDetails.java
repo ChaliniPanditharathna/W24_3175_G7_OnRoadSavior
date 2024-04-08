@@ -24,20 +24,12 @@ public class AdapterBreakdownRequestDetails extends RecyclerView.Adapter<Adapter
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
     private Context context;
 
-    /*public interface OnRatingProvidedListener {
-        void onRatingProvided(int position, float rating);
-    }*/
-
-    //private OnRatingProvidedListener ratingListener;
-
     public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
     }
 
-    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, /*OnRatingProvidedListener ratingListener,*/
-                                          Context context) {
+    public AdapterBreakdownRequestDetails(List<BreakdownRequestDetails> breakdownRequestDetailsList, Context context) {
         this.breakdownRequestDetailsList = breakdownRequestDetailsList;
-        /*this.ratingListener = ratingListener;*/
         this.context = context;
     }
 

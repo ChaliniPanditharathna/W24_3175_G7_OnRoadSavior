@@ -1,14 +1,11 @@
 package com.example.w24_3175_g7_onroadsavior;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
 import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownRequestDetails;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ public class HistroyFragment extends Fragment {
     private List<BreakdownRequestDetails> breakdownRequestDetailsList;
     DBHelper dbHelper;
     String providerId;
+    String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,21 +40,19 @@ public class HistroyFragment extends Fragment {
         breakdownRequestDetailsList = new ArrayList<>();
         adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList);
 
-        /*AdapterBreakdownRequestDetails.OnRatingProvidedListener ratingListener = new AdapterBreakdownRequestDetails.OnRatingProvidedListener() {
-            @Override
-            public void onRatingProvided(int position, float rating) {
-                BreakdownRequestDetails request = breakdownRequestDetailsList.get(position);
-                dbHelper.updateProviderRating(request.getProviderId(), rating);
-                request.setProviderRating(rating);
-                adapterBreakdownRequestDetails.notifyItemChanged(position);
-            }
-        };*/
-
-        adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList, /*ratingListener,*/getContext());
+        adapterBreakdownRequestDetails = new AdapterBreakdownRequestDetails(breakdownRequestDetailsList, getContext());
 
         recyclerViewHistory.setAdapter(adapterBreakdownRequestDetails);
 
-        Cursor cursor = dbHelper.getBreakdownRequestData();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            userId = user.getUid();
+        } else {
+            Log.e("Error", "Can't get user Id");
+        }
+
+        Cursor cursor = dbHelper.getBreakdownRequestDataForUser(userId);
         if (cursor != null && cursor.moveToFirst()) {
             int createdDateIndex = cursor.getColumnIndex("Created_Date");
             int updatedDateIndex = cursor.getColumnIndex("Updated_Date");
@@ -96,14 +94,9 @@ public class HistroyFragment extends Fragment {
                         status,
                         providerLocation
                 );
-                /*if (status.equals("Done") && providerRating == 0.0) {
-                    showRatingDialog(providerId);
-                }*/
                 breakdownRequestDetailsList.add(req);
             } while (cursor.moveToNext());
             cursor.close();
-            // Update the RecyclerView
-           // adapterBreakdownRequestDetails.notifyDataSetChanged();
         }
         return view;
     }
@@ -113,33 +106,4 @@ public class HistroyFragment extends Fragment {
         breakdownRequestDetailsList.addAll(newRequestDetailsList);
         adapterBreakdownRequestDetails.notifyDataSetChanged();
     }
-
-  /* private void showRatingDialog(String providerId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.rating_dialog, null);
-
-        RatingBar ratingBar = dialogView.findViewById(R.id.dialog_rating_bar);
-
-        builder.setView(dialogView)
-                .setTitle("Rate Provider")
-                .setMessage("Please rate your experience with the provider.")
-                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        float userRating = ratingBar.getRating();
-                        dbHelper.updateProviderRating(providerId, userRating);
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Handle cancellation
-                        Toast.makeText(getContext(), "Rating cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .create().show();
-    }*/
 }
