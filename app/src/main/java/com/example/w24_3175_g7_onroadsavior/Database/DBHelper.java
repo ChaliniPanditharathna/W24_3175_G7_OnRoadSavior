@@ -11,10 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
-import com.example.w24_3175_g7_onroadsavior.UserHelperClass;
+import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
 
-import java.sql.Blob;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,14 +33,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE User ( ID TEXT PRIMARY KEY,Name VARCHAR(255) NOT NULL,Username VARCHAR(100) NOT NULL,Email VARCHAR(255) NOT NULL, Phone_NO VARCHAR(20), User_Type VARCHAR(255) NOT NULL, Created_Date LOCALDATE NOT NULL)");
 
-        //db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255)\n)");
-
         db.execSQL("CREATE TABLE ServiceProvider (ID TEXT PRIMARY KEY, Location VARCHAR(255) NOT NULL, BreakDownType VARCHAR(255), Rating REAL DEFAULT 0\n)");
-
 
         db.execSQL("CREATE TABLE BreakDownRequest ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date TEXT NOT NULL,Updated_Date TEXT, User_ID TEXT NOT NULL, Provider_ID TEXT NOT NULL, Breakdown_Type TEXT,Location TEXT,Description TEXT, Image TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (User_ID) REFERENCES User(ID),FOREIGN KEY (Provider_ID) REFERENCES ServiceProvider(ID))");
 
         db.execSQL("CREATE TABLE Notification ( ID INTEGER PRIMARY KEY AUTOINCREMENT,Created_Date LOCALDATE NOT NULL,Updated_Date LOCALDATE, RECIVER_ID Text NOT NULL, Message TEXT, Status VARCHAR(100) NOT NULL ,FOREIGN KEY (RECIVER_ID) REFERENCES User(ID))");
+
+        db.execSQL("CREATE TABLE EmergencyContact (ID INTEGER PRIMARY KEY AUTOINCREMENT, Contact_Name VARCHAR(255) NOT NULL, Contact_Number VARCHAR(255)\n)");
     }
 
     @Override
@@ -50,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS User");
         db.execSQL("DROP TABLE IF EXISTS ServiceProvider");
         db.execSQL("DROP TABLE IF EXISTS BreakDownRequest");
+        db.execSQL("DROP TABLE IF EXISTS EmergencyContact");
         onCreate(db);
     }
 
@@ -105,12 +103,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
+
     // Clear user table
     public void clearUserTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("User", null, null);
         db.close();
     }
+
 
     //CRUD - Table: ServiceProvider
     public boolean addServiceProvider(String uId, String location, String serviceType){
@@ -141,13 +141,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
 
-
             String location = cursor.getString(1);
             String serviceType = cursor.getString(2);
 
             UserHelperClass serviceProvider = new UserHelperClass();
             serviceProvider.setLocation(location);
-            serviceProvider.setServiceType(serviceType);
+            serviceProvider.setServiceType( serviceType);
 
             return serviceProvider;
         }
@@ -155,12 +154,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    // Clear user table
+
+    // Clear Service Provider table
     public void clearServiceProviderTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("ServiceProvider", null, null);
         db.close();
     }
+
 
     public void addRequest(String createdDate, String updatedDate, String userID, String providerID, String breakdownType, String address, String description, String image, String status) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -205,6 +206,19 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return rating;
+    }
+
+    public float getRating(String uId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        float rate = 0.0F;
+        String query = "SELECT Rating FROM ServiceProvider WHERE ID = ?";
+        String[] selectionArgs = { uId }; // Pass uId as selection argument
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        rate = cursor.getColumnIndex("rate"); // Get the rate from the cursor
+        cursor.close();
+
+        return rate;
     }
 
     public Cursor getRequestData(String uid) {
@@ -432,6 +446,44 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
         return providerIdAndStatusMap;
+    }
+
+     @SuppressLint("Range")
+    public String getLatestCreatedDateForUser(String userID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT  Created_Date FROM  BreakDownRequest WHERE User_ID = ? ORDER BY ID DESC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, new String[]{userID});
+
+        String latestDate = "None received";
+        if (cursor.moveToFirst()) {
+            latestDate = cursor.getString(cursor.getColumnIndex("Created_Date"));
+        }
+
+        cursor.close();
+        return latestDate;
+    }
+
+    public void addEmergencyContact() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("INSERT INTO EmergencyContact (Contact_Name, Contact_Number) VALUES ( 'Emergency Hotline','911')\n");
+        db.execSQL("INSERT INTO EmergencyContact (Contact_Name, Contact_Number) VALUES ( 'Report a spill','1-800-663-3456')\n");
+        db.execSQL("INSERT INTO EmergencyContact (Contact_Name, Contact_Number) VALUES ( 'ICBC','1-800-663-3051')\n");
+        db.execSQL("INSERT INTO EmergencyContact (Contact_Name, Contact_Number) VALUES ( 'Video Relay Services','1-604-215-5101')\n");
+        db.execSQL("INSERT INTO EmergencyContact (Contact_Name, Contact_Number) VALUES ( 'Wildfire','1-800-663-5555')\n");
+    }
+
+    public Cursor getEmergencyContact(){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        Cursor cursor = DB.rawQuery("Select *  from EmergencyContact", null);
+        return  cursor;
+    }
+
+    public void clearEmergencyContact() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("EmergencyContact", null, null);
+        db.close();
     }
 
 }

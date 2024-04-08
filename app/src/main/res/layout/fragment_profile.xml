@@ -120,7 +120,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imgViewRatingIcon"
+                    android:id="@+id/imgViewUniqueIcon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
@@ -128,7 +128,7 @@
                     android:src="@drawable/rating" />
 
                 <TextView
-                    android:id="@+id/txtViewRatingIconValueTxt"
+                    android:id="@+id/txtViewUniqueIValueTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -139,10 +139,10 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/txtViewRatingIconTxt"
+                    android:id="@+id/txtViewUniqueTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtViewRatingIconValueTxt"
+                    android:layout_below="@+id/txtViewUniqueIValueTxt"
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
                     android:text="Rating"

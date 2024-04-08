@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -165,8 +167,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference("User");
-
         DatabaseReference userNameRef = reference.child(uId);
+
+        DBHelper DB = new DBHelper(this);
 
         ValueEventListener eventListener = new ValueEventListener() {
 
@@ -183,6 +186,13 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
 
                             if(error == null) {
+                                //add user record to local db
+                                DB.addUser(user.getuID(), user.getFullName(), user.getUserName(), user.getEmail(), user.getContactNumber(), user.getUserType());
+
+                                if (user.getUserType().equalsIgnoreCase("Service Provider")) {
+                                    //add service provider record
+                                    DB.addServiceProvider(user.getuID(), user.getLocation(), user.getServiceType());
+                                }
                                 Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
                             }

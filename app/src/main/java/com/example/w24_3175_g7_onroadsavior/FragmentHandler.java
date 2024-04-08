@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -90,11 +91,15 @@ public class FragmentHandler extends AppCompatActivity {
             redirectToLogin();
             return;
         }
+
+
         UserHelperClass user = DB.getUserData(currentUser.getUid());
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab_emergency);
         setSupportActionBar(toolbar);
         makeNotification();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav){
@@ -142,11 +147,11 @@ public class FragmentHandler extends AppCompatActivity {
                     replaceFragment(new UserHomeFragment(), currentUser);
                 }
                 fab.setVisibility(View.VISIBLE);
+                drawerLayout.closeDrawers();
                 return  true;
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab_emergency);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +169,7 @@ public class FragmentHandler extends AppCompatActivity {
                 if(user.getUserType().equalsIgnoreCase("Service Requester")){
                     replaceFragment(new UserHomeFragment(), currentUser);
                 }
+                fab.setVisibility(View.VISIBLE);
                 return  true;
             }
             if(item.getItemId() == R.id.history){
