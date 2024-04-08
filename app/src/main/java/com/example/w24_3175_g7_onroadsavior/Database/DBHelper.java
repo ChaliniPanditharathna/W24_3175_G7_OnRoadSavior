@@ -17,7 +17,9 @@ import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "onRoadSaviorDB";
@@ -171,10 +173,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getBreakdownRequestData(){
+    /*public Cursor getBreakdownRequestData(){
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select *  from BreakDownRequest", null);
         return  cursor;
+    }*/
+
+    public Cursor getBreakdownRequestDataForUser(String userId){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        String query = "SELECT * FROM BreakDownRequest WHERE User_ID = ?";
+        Cursor cursor = DB.rawQuery(query, new String[]{userId});
+        return cursor;
     }
 
     public void updateProviderRating(String providerId, float rating) {
@@ -405,6 +414,24 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
         return providerLocation;
+    }
+
+    public Map<String, String> getProviderIdAndStatus() {
+        Map<String, String> providerIdAndStatusMap = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null) {
+            String query = "SELECT Provider_ID, Status FROM BreakDownRequest";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String providerId = cursor.getString(cursor.getColumnIndex("Provider_ID"));
+                    @SuppressLint("Range") String status = cursor.getString(cursor.getColumnIndex("Status"));
+                    providerIdAndStatusMap.put(providerId, status);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return providerIdAndStatusMap;
     }
 
 }
