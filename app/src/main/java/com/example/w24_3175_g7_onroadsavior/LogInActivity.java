@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -54,38 +55,9 @@ public class LogInActivity extends AppCompatActivity {
         txtViewInvalidCredentials = findViewById(R.id.txtViewInvalidCredentials);
         txtViewInvalidCredentials.setVisibility(View.GONE);
 
-        //get user records from remote database
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
-        //initialize local db
         DBHelper DB = new DBHelper(this);
-        DB.clearUserTable();
-        DB.clearServiceProviderTable();
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    UserHelperClass user = snapshot.getValue(UserHelperClass.class);
-                    if (user != null) {
-
-                        //add user record
-                        DB.addUser(user.getuID(), user.getFullName(), user.getUserName(), user.getEmail(), user.getContactNumber(), user.getUserType());
-
-                        if (user.getUserType().equalsIgnoreCase("Service Provider")) {
-                            //add service provider record
-                            DB.addServiceProvider(user.getuID(), user.getLocation(), user.getServiceType());
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Failed to read user data from Firebase.", error.toException());
-                Toast.makeText(LogInActivity.this, "Failed to read user data from Firebase.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        DB.clearEmergencyContact();
+        DB.addEmergencyContact();
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
