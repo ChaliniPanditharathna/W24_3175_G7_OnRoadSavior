@@ -76,7 +76,6 @@ public class HistroyFragment extends Fragment {
                 String status = (statusIndex != -1) ? cursor.getString(statusIndex) : "";
                 //String status ="Done";
 
-                float providerRating = dbHelper.getProviderRating(providerId);
                 String userName = dbHelper.getUserName(userId);
                 String providerName = dbHelper.getProviderName(providerId);
                 String providerLocation = dbHelper.getProviderLocation(providerId);
