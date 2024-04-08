@@ -1,5 +1,7 @@
 package com.example.w24_3175_g7_onroadsavior;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -25,12 +30,16 @@ public class ProviderRequestHistoryFragment extends Fragment {
 
     StorageReference storageReference;
     FirebaseStorage storage;
+    String providerId;
+    DBHelper dbHelper;
+    String providerLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_provider_request_history, container, false);
+        dbHelper = new DBHelper(v.getContext());
         Bundle bundle = this.getArguments();
         String username = bundle.getString("USERNAME");
         String userId = bundle.getString("USERID");
@@ -54,6 +63,7 @@ public class ProviderRequestHistoryFragment extends Fragment {
         TextView txtMessage = v.findViewById(R.id.textViewMessage);
         ImageView userPic = v.findViewById(R.id.imageViewUserIcon);
         ImageView userBreakdownPic = v.findViewById(R.id.imageViewBreakDown);
+        Button buttonTrackRoute = v.findViewById(R.id.trackRoute);
 
         Button trackRoute = v.findViewById(R.id.trackRoute);
         if(message.equals("Successfully Done")){
@@ -96,6 +106,32 @@ public class ProviderRequestHistoryFragment extends Fragment {
         txtCreatedDate.setText(createdDate);
         txtPhoneNo.setText(phoneNo);
         txtMessage.setText(message);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            providerId = user.getUid();
+        } else {
+            Log.e("Error", "Can't get user Id");
+        }
+
+        providerLocation = dbHelper.getProviderLocation(providerId);
+
+        buttonTrackRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d("providerLocation" ,providerLocation);
+                Log.d("userLocation", location);
+
+                Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" + providerLocation + "&destination=" + location);
+
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                getContext().startActivity(mapIntent);
+            }
+        });
         return v;
     }
 }
