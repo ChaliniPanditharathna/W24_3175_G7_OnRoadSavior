@@ -1,6 +1,7 @@
 package com.example.w24_3175_g7_onroadsavior;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -67,7 +68,11 @@ public class ProviderRequestHistoryFragment extends Fragment {
 
         Button trackRoute = v.findViewById(R.id.trackRoute);
         if(message.equals("Successfully Done")){
+            Log.e("UserRequestAcceptFragment", "I neeed: " );
             trackRoute.setEnabled(false);
+            trackRoute.setText("Track Route");
+            trackRoute.setTextColor(Color.BLACK);
+            trackRoute.setBackgroundColor(Color.GRAY);
         }
         StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
         // Check if the ImageView is not null before loading the image

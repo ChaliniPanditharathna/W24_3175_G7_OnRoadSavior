@@ -124,7 +124,17 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
         result.putString("DESCRIPTION", req.getDescription());
         result.putString("IMAGEURL", req.getImageUrl());
 
-        if (req.getStatus().equals("Accept")) {
+        if (req.getStatus().equals("Pending")) {
+            result.putString("BREAKDOWNREQUESTID", req.getBreakDownRequestId());
+
+            Fragment userRequestAcceptFragment = new UserRequestAcceptFragment();
+            userRequestAcceptFragment.setArguments(result);
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.frame_layout, userRequestAcceptFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
             if (req.getStatus().equals("Done")) {
                 result.putString("MESSAGE", "Successfully Done");
             }
@@ -140,17 +150,6 @@ public class ServiceProviderRequestFragment extends Fragment implements Provider
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.frame_layout, providerRequestHistoryFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-        if (req.getStatus().equals("Pending")) {
-            result.putString("BREAKDOWNREQUESTID", req.getBreakDownRequestId());
-
-            Fragment userRequestAcceptFragment = new UserRequestAcceptFragment();
-            userRequestAcceptFragment.setArguments(result);
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.frame_layout, userRequestAcceptFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         }

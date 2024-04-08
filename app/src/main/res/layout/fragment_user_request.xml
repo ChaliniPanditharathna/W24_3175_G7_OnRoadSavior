@@ -164,7 +164,26 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/infoLayoutSeven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infoLayoutFour"
+            android:layout_marginTop="13dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
+
+            <Button
+                android:id="@+id/trackRoute"
+                android:layout_width="146dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#1E407A"
+                android:text="Track Route"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageViewBreakDown"
@@ -182,7 +201,7 @@
             android:id="@+id/textViewDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/infoLayoutFour"
+            android:layout_below="@id/infoLayoutSeven"
             android:layout_marginTop="23dp"
             android:layout_marginStart="8dp"
             android:text="TextView" />
