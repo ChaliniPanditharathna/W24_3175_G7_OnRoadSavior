@@ -67,13 +67,14 @@ public class ProviderRequestHistoryFragment extends Fragment {
         Button buttonTrackRoute = v.findViewById(R.id.trackRoute);
 
         Button trackRoute = v.findViewById(R.id.trackRoute);
-        if(message.equals("Successfully Done")){
+        if(message.equals("Successfully Done") || message.equals("You rejected this request")){
             Log.e("UserRequestAcceptFragment", "I neeed: " );
             trackRoute.setEnabled(false);
             trackRoute.setText("Track Route");
             trackRoute.setTextColor(Color.BLACK);
             trackRoute.setBackgroundColor(Color.GRAY);
         }
+
         StorageReference profileImageRef = storageReference.child("profile_images/" + userId + ".jpg");
         // Check if the ImageView is not null before loading the image
         if (userPic != null) {
