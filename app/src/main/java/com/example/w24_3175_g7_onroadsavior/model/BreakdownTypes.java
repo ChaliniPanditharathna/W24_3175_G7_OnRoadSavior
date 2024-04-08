@@ -6,9 +6,15 @@ public class BreakdownTypes {
 
     int breakdownIcon;
 
+    private float providerRating;
+
     public BreakdownTypes(String breakdownType, int breakdownIcon) {
         this.breakdownType = breakdownType;
         this.breakdownIcon = breakdownIcon;
+    }
+
+    public BreakdownTypes(float providerRating) {
+        this.providerRating = providerRating;
     }
 
     public String getBreakdownType() {
@@ -25,5 +31,13 @@ public class BreakdownTypes {
 
     public void setBreakdownIcon(int breakdownIcon) {
         this.breakdownIcon = breakdownIcon;
+    }
+
+    public float getProviderRating() {
+        return providerRating;
+    }
+
+    public void setProviderRating(float providerRating) {
+        this.providerRating = providerRating;
     }
 }

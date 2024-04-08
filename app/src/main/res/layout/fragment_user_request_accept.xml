@@ -138,17 +138,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/infoLayoutFour"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="8dp"
             android:text="TextView" />
 
         <ImageView
             android:id="@+id/imageViewBreakDown"
             android:layout_width="240dp"
             android:layout_height="120dp"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/textViewDescription"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:src="@drawable/vehiclebreakdown" />
+            app:srcCompat="@drawable/breakdownpicture" />
 
         <Button
             android:id="@+id/buttonAcceptRequest"
@@ -157,7 +158,6 @@
             android:layout_below="@+id/imageViewBreakDown"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:background="@color/material_dynamic_primary30"
             android:backgroundTint="#1E407A"
             android:text="@string/AcceptRequest"
             android:textColor="@color/white" />
@@ -169,7 +169,6 @@
             android:layout_below="@+id/buttonAcceptRequest"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="11dp"
-            android:background="@color/material_dynamic_primary30"
             android:backgroundTint="#1E407A"
             android:text="@string/BtnRejectRequest"
             android:textColor="@color/white" />
