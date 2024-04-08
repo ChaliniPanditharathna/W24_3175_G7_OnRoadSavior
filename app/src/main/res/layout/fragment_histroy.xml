@@ -12,7 +12,6 @@
         android:background="#c9d5f7"
         android:orientation="vertical">
 
-    <!-- RecyclerView to display request details -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHistory"
         android:layout_width="match_parent"
