@@ -224,14 +224,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getRequestData(String uid) {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE (Status ='Pending' OR Status ='Accept') and Provider_Id = '" + uid + "'", null);
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE (Status ='Pending' OR Status ='Accept') and Provider_Id = '" + uid + "' ORDER BY Updated_Date DESC", null);
         return cursor;
     }
 
     public Cursor getRequestHistoryData(String uid) {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select b.Breakdown_Type, b.Location, b.Description, b.Created_Date, b.Updated_Date, b.Image, b.User_ID, b.Provider_ID," +
-                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject' and Provider_Id = '" + uid + "'", null);
+                "u.Name,u.Phone_No, b.ID, b.Status, b.Image  from BreakDownRequest as b INNER JOIN User as u ON b.user_id = u.id WHERE Status ='Done' OR Status ='Reject' and Provider_Id = '" + uid + "' ORDER BY Updated_Date DESC", null);
         return cursor;
     }
 
