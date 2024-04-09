@@ -48,6 +48,7 @@ public class BreakdownRequestFragment extends Fragment {
     EditText editTextDescription;
     EditText editTextSearchProvider;
     String name;
+    String providerName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,6 +115,7 @@ public class BreakdownRequestFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     providerId = nearbyProviders.get(which).getId();
+                    providerName = nearbyProviders.get(which).getName();
                     createBreakdownRequest();
                 }
             });
@@ -159,7 +161,7 @@ public class BreakdownRequestFragment extends Fragment {
         builder.setMessage("Created Date: " + currentDateAndTime + "\n\n" +
                 "Updated Date: " + updatedDate + "\n\n" +
                 /*"User Name: " + userName + "\n\n" +*/
-                "Provider Name: " + name + "\n\n" +
+                "Provider Name: " + providerName + "\n\n" +
                 "Breakdown Type: " + breakdownType + "\n\n" +
                 "Current Location: " + address + "\n\n" +
                 "Description: " + description + "\n\n" +
