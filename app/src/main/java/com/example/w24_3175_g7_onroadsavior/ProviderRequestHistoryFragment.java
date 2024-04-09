@@ -68,7 +68,6 @@ public class ProviderRequestHistoryFragment extends Fragment {
 
         Button trackRoute = v.findViewById(R.id.trackRoute);
         if(message.equals("Successfully Done") || message.equals("You rejected this request")){
-            Log.e("UserRequestAcceptFragment", "I neeed: " );
             trackRoute.setEnabled(false);
             trackRoute.setText("Track Route");
             trackRoute.setTextColor(Color.BLACK);

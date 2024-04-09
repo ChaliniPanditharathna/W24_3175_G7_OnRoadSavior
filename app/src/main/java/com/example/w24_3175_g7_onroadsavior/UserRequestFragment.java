@@ -1,6 +1,7 @@
 package com.example.w24_3175_g7_onroadsavior;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,6 +100,10 @@ public class UserRequestFragment extends Fragment {
         }
         if(action.equals("Reject")){
             imageViewDesition.setImageResource(R.drawable.rejecticon);
+            buttonTrackRoute.setEnabled(false);
+            buttonTrackRoute.setText("Track Route");
+            buttonTrackRoute.setTextColor(Color.BLACK);
+            buttonTrackRoute.setBackgroundColor(Color.GRAY);
         }
         txtUsername.setText(username);
         txtBreakDownType.setText(breakDownType);
