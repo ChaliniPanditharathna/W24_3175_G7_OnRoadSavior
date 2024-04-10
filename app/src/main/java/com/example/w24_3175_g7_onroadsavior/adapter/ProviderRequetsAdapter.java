@@ -1,4 +1,4 @@
-package com.example.w24_3175_g7_onroadsavior;
+package com.example.w24_3175_g7_onroadsavior.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.w24_3175_g7_onroadsavior.Interface.ProviderRequestInterface;
 import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
+import com.example.w24_3175_g7_onroadsavior.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
