@@ -15,8 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.UserHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;

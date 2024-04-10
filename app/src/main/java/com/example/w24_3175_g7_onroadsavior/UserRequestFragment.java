@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;

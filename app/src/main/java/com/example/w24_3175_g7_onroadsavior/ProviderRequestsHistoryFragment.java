@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.Interface.ProviderRequestHistoryInterface;
-import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
+import com.example.w24_3175_g7_onroadsavior.model.RequestDetails;
 import com.example.w24_3175_g7_onroadsavior.adapter.ProviderRequestHistoryAdapter;
 import com.google.firebase.auth.FirebaseUser;
 

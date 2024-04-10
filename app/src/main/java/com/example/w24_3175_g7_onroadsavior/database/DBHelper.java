@@ -1,4 +1,4 @@
-package com.example.w24_3175_g7_onroadsavior.Database;
+package com.example.w24_3175_g7_onroadsavior.database;
 
 import static java.time.LocalDate.now;
 
@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
-import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
+import com.example.w24_3175_g7_onroadsavior.model.ServiceProvider;
+import com.example.w24_3175_g7_onroadsavior.model.UserHelperClass;
 
 import java.util.ArrayList;
 import java.util.Date;

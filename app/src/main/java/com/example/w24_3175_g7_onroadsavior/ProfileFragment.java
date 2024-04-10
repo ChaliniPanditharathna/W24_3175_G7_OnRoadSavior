@@ -22,8 +22,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.UserHelperClass;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.UserHelperClass;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

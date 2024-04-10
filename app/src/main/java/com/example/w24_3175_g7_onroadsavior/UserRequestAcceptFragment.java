@@ -3,7 +3,6 @@ package com.example.w24_3175_g7_onroadsavior;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -21,7 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;

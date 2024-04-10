@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.w24_3175_g7_onroadsavior.Model.EmergencyContact;
+import com.example.w24_3175_g7_onroadsavior.model.EmergencyContact;
 import com.example.w24_3175_g7_onroadsavior.R;
 
 import java.util.ArrayList;

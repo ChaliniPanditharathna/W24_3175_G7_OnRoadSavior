@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.w24_3175_g7_onroadsavior.Interface.ProviderRequestHistoryInterface;
-import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
+import com.example.w24_3175_g7_onroadsavior.model.RequestDetails;
 import com.example.w24_3175_g7_onroadsavior.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

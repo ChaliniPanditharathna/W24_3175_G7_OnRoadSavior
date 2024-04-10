@@ -11,12 +11,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
-import com.example.w24_3175_g7_onroadsavior.Model.EmergencyContact;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.EmergencyContact;
 import com.example.w24_3175_g7_onroadsavior.adapter.AdapterEmergencyContact;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 

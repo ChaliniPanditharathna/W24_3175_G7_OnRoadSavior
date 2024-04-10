@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownTypes;
+import com.example.w24_3175_g7_onroadsavior.model.BreakdownTypes;
 import com.example.w24_3175_g7_onroadsavior.R;
 
 import java.util.List;

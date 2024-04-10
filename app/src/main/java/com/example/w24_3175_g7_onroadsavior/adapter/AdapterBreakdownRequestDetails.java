@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
+import com.example.w24_3175_g7_onroadsavior.model.BreakdownRequestDetails;
 import com.example.w24_3175_g7_onroadsavior.R;
 
 import java.util.List;

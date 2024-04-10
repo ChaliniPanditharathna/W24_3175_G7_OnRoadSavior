@@ -2,7 +2,6 @@ package com.example.w24_3175_g7_onroadsavior;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
-import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
-import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownRequestDetails;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownType;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownTypes;
+import com.example.w24_3175_g7_onroadsavior.model.BreakdownTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;

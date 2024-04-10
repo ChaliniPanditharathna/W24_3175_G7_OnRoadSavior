@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.BreakdownRequestDetails;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.BreakdownRequestDetails;
 import com.example.w24_3175_g7_onroadsavior.adapter.AdapterBreakdownRequestDetails;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

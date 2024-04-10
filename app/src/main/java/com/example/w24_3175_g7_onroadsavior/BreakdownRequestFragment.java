@@ -19,8 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.ServiceProvider;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.ServiceProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

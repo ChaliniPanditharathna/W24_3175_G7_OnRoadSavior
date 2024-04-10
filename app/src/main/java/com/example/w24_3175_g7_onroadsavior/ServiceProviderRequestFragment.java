@@ -1,14 +1,11 @@
 package com.example.w24_3175_g7_onroadsavior;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +15,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.adapter.ProviderRequetsAdapter;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
 import com.example.w24_3175_g7_onroadsavior.Interface.ProviderRequestInterface;
-import com.example.w24_3175_g7_onroadsavior.Model.RequestDetails;
+import com.example.w24_3175_g7_onroadsavior.model.RequestDetails;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

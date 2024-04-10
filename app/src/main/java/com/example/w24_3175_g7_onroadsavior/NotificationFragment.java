@@ -9,8 +9,8 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.w24_3175_g7_onroadsavior.Database.DBHelper;
-import com.example.w24_3175_g7_onroadsavior.Model.Notification;
+import com.example.w24_3175_g7_onroadsavior.database.DBHelper;
+import com.example.w24_3175_g7_onroadsavior.model.Notification;
 import com.example.w24_3175_g7_onroadsavior.adapter.NotificationAdapter;
 import com.google.firebase.auth.FirebaseUser;
 
